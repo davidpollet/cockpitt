@@ -1,0 +1,65 @@
+@import "./components/button.css";
+@import "./grid-cols-bills.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[hidden] {
+  display: none !important;
+}
+
+@keyframes circle-in-top-right {
+  from {
+    clip-path: inset(25% 1em 25% calc(100% - 1em));
+  }
+  to {
+    clip-path: inset(-1em);
+  }
+}
+
+@keyframes circle-out-top-right {
+  from {
+    clip-path: inset(-1em);
+  }
+  to {
+    clip-path: inset(25% 1em 25% calc(100% - 1em));
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: rotate(-20deg);
+  }
+
+  20%,
+  80% {
+    transform: rotate(10deg);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: rotate(-20deg);
+  }
+
+  40%,
+  60% {
+    transform: rotate(10deg);
+  }
+}
+
+@layer components {
+  .shake {
+    animation: 1000ms ease shake backwards;
+    transform-origin: center bottom;
+  }
+
+  .reveal:not([hidden]) {
+    animation: 300ms ease circle-in-top-right forwards;
+  }
+
+  .reveal.hidding {
+    animation: 300ms ease circle-out-top-right forwards;
+  }
+}

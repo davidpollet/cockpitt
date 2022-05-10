@@ -1,0 +1,131 @@
+.step {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: theme('colors.gray.500');
+  align-items: center;
+  cursor: pointer;
+  padding-right: theme('padding.2');
+
+  &:hover,
+  &:focus-within {
+    color: theme('colors.violet.500');
+    .step-icon {
+      box-shadow: 0 0 0 2px currentColor, 0 0 0 5px theme('colors.violet.200');
+    }
+  }
+
+  &.is-fullfilled {
+    color: theme('colors.violet.500');
+
+    .step-fake-checkbox svg {
+      transform: scale(1);
+    }
+
+    .step-icon {
+      background-size: 100% 100%;
+      svg {
+        color: #fff;
+      }
+    }
+  }
+
+  &.is-late {
+    .step-fake-checkbox {
+      color: theme('colors.red.500');
+    }
+  }
+
+  &.is-disabled {
+    &:not(.is-late) {
+      opacity: 0.65;
+    }
+    pointer-events: none;
+  }
+}
+
+.step-sent {
+  z-index: 5;
+}
+
+.step-cashed {
+  padding-left: theme('padding.2');
+  &.is-fullfilled {
+    --delay: 100ms;
+    .step-icon::before {
+      animation: lineDraw 100ms ease forwards;
+    }
+  }
+
+  .step-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 2.75em;
+    height: 3px;
+    background: theme('colors.violet.500');
+    right: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: 200ms ease all var(--delay, 0ms);
+
+    svg {
+      transition-delay: var(--delay, 0ms);
+    }
+  }
+}
+
+.step-icon {
+  width: 2em;
+  height: 2em;
+  box-shadow: 0 0 0 2px currentColor, 0 0 0 0 theme('colors.violet.200');
+  border-radius: theme('borderRadius.sm');
+  padding: theme('padding[1]');
+  position: relative;
+  background: linear-gradient(
+      theme('colors.violet.500'),
+      theme('colors.violet.500')
+    )
+    bottom center / 100% 0 no-repeat;
+  transition: 200ms ease all var(--delay, 0ms);
+}
+
+.step-fake-checkbox {
+  content: '';
+  background: #fff;
+  width: 1rem;
+  height: 1rem;
+  box-shadow: 0 0 0 2px currentColor;
+  border-radius: theme('borderRadius.sm');
+  background: #fff;
+  display: flex;
+  transform: translateY(-50%);
+  margin-bottom: -0.5em;
+  font-size: 1.25em;
+  transition-delay: var(--delay, 0ms);
+
+  svg {
+    margin: auto;
+    transition: 200ms ease all;
+    transform: scale(0);
+    transition-delay: var(--delay, 0ms);
+  }
+}
+
+@keyframes lineDraw {
+  from {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  51% {
+    transform-origin: right center;
+  }
+  to {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
+}
