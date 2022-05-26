@@ -26,10 +26,7 @@ function getSsrUserData(
       }
     }
     const store = getStore()
-    const URL =
-      process.env.NODE_ENV === "production"
-        ? process.env.URL_PROD
-        : process.env.URL_LOCAL
+    const URL = process.env.SITE_URL
 
     const api = new FetchWrapper(`${URL}/api`)
 

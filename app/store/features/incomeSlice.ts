@@ -48,7 +48,6 @@ const incomeSlice = createSlice({
     },
 
     updateBill: (state, action) => {
-      console.log(action.payload.amount)
       const billIndex = state.bills.findIndex(
         (bill) => bill.id === action.payload.id
       )
