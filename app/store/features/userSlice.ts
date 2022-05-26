@@ -1,18 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
+import createUser from "@helpers/createUser"
 import { userProps } from "utils/types/userProps"
 
-const initialState: userProps = {
-  isLoggedIn: false,
-  showAuthModal: false,
-  data: {
-    createdAt: null,
-    email: "",
-    id: "",
-    memberShip: false,
-    memberShipEndAt: null,
-    picture: "",
-    username: "",
-  },
+const initialState = {
+  data: {} as userProps,
 }
 
 const userSlice = createSlice({
@@ -21,19 +12,13 @@ const userSlice = createSlice({
   reducers: {
     setUserData: (state, action) => {
       state.data = { ...state.data, ...action.payload }
-      action.payload.email
-        ? (state.isLoggedIn = true)
-        : (state.isLoggedIn = false)
     },
-    openAuthModal: (state) => {
-      state.showAuthModal = true
-    },
-    closeAuthModal: (state) => {
-      state.showAuthModal = false
+    clearUserData: (state) => {
+      state.data = { ...initialState.data }
     },
   },
 })
 
-export const { setUserData, openAuthModal, closeAuthModal } = userSlice.actions
+export const { setUserData, clearUserData } = userSlice.actions
 
 export default userSlice.reducer

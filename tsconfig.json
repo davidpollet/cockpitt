@@ -5,6 +5,7 @@
       "@components/*": ["components/*"],
       "@consts/*": ["utils/consts/*"],
       "@helpers/*": ["utils/helpers/*"],
+      "@hooks/*": ["utils/hooks/*"],
       "@localTypes/*": ["utils/types/*"],
       "@store/*": ["app/store/*"],
       "@styles/*": ["styles/*"],

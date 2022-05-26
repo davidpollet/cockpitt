@@ -1,7 +1,5 @@
-import { IconMoon, IconSun } from "./Icons.index"
-import React, { ComponentProps } from "react"
+import { EmojiMoon, EmojiSun } from "./IconsEmoji.index"
 
-import classnames from "classnames"
 import { useEffect } from "react"
 import { useState } from "react"
 
@@ -20,6 +18,7 @@ function ThemeColorSwitch(): JSX.Element | null {
     document.head.insertAdjacentHTML(
       "beforeend",
       `<style id="dark-mode-transition">
+        body {overflow-x: hidden !important;}
         *,*::before,*::after {transition: 200ms ease all !important}
       </style>`
     )
@@ -49,15 +48,15 @@ function ThemeColorSwitch(): JSX.Element | null {
       className="button overflow-hidden text-2xl outline-none ring-gray-50 focus:-translate-y-1 focus:bg-white/40"
       aria-hidden
     >
-      <IconSun
+      <EmojiSun
         className={`${!darkMode && "translate-y-0 opacity-100"} ${
           darkMode && "translate-y-8 opacity-0"
         } transition duration-300`}
       />
-      <IconMoon
-        className={`${darkMode && "translate-y-0 opacity-100"} ${
-          !darkMode && "translate-y-10 opacity-0"
-        } absolute transition duration-300`}
+      <EmojiMoon
+        className={`${darkMode && "translate-y-0 opacity-100"}
+        ${!darkMode && "translate-y-10 opacity-0"}
+        absolute transition duration-300`}
         style={{ filter: "drop-shadow(0 0 10px lightyellow)" }}
       />
     </button>

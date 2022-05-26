@@ -18,10 +18,10 @@ function Turnover({
   return (
     <div className="grid gap-4">
       <div className="rounded-sm p-2 text-right">
-        <div className="flex justify-end text-3xl text-violet-300 dark:text-violet-300/80">
+        <div className="flex justify-end text-3xl text-violet-300 dark:text-violet-100/70">
           {icon}
         </div>
-        <h3 className="uppercase text-gray-600 dark:text-violet-300 <md:text-sm">
+        <h3 className="uppercase text-gray-600 dark:text-violet-100 <md:text-sm">
           {label}
         </h3>
         <p className="min-w-[11ch] text-2xl font-bold leading-none text-violet-500 dark:text-white md:text-3xl">

@@ -1,9 +1,6 @@
 import BillsFormAddNew from "@components/BillsFormAddNew"
-import BillsHeader from "@components/BillsHeader"
 import BillsList from "@components/BillsList"
 import Turnovers from "@components/Turnovers"
-import { useSelector } from "react-redux"
-import { useState } from "react"
 
 function IncomesTracker() {
   return (
@@ -12,10 +9,9 @@ function IncomesTracker() {
         <Turnovers />
       </div>
       <div
-        className="dark:text-current-50 self-start rounded-md bg-white ring-2 ring-gray-300/10 dark:bg-violet-850 dark:ring-violet-800"
+        className="self-start rounded-md bg-white ring-2 ring-gray-300/10 dark:bg-violet-800 dark:ring-0"
         role="table"
       >
-        <BillsHeader />
         <BillsFormAddNew />
         <BillsList />
       </div>

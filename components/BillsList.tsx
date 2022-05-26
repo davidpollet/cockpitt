@@ -1,11 +1,22 @@
-import { addDummyBills, removeDummyBills } from "@store/features/billsSlice"
+import { addDummyBills, removeDummyBills } from "@store/features/incomeSlice"
 import { useDispatch, useSelector } from "react-redux"
 
 import { AnimatePresence } from "framer-motion"
 import BillsListItem from "./BillsListItem"
 import { RootState } from "@store/store"
 import { billProps } from "@localTypes/billProps"
-import dummyBills from "@consts/dummyBills"
+import classNames from "classnames"
+
+const BillsListTwClass = classNames([
+  "grid gap-[1px] bg-gray-100/80 p-1 pb-2 transition-all duration-300 ease-in-out",
+  "dark:bg-violet-750 dark:p-0",
+  " lg:px-2 lg:pt-2",
+])
+
+const testDemoButtonTwClass = classNames([
+  "button is-outline justify-self-center",
+  "dark:ring-violet-100 dark:from-violet-300 dark:to-violet-300 dark:text-violet-100 dark:hover:text-violet-600",
+])
 
 function BillsList() {
   const dispatch = useDispatch()
@@ -34,14 +45,14 @@ function BillsList() {
 
   if (bills.length === 0)
     return (
-      <div role="row" className="grid gap-2 p-2 text-center lg:p-4">
+      <div
+        role="row"
+        className="grid gap-2 p-2 text-center dark:bg-violet-850 lg:p-4"
+      >
         <p className="text-xl font-bold text-violet-500 dark:text-white lg:text-2xl">
           Aucune facture à afficher
         </p>
-        <button
-          className="button is-filled justify-self-center bg-gradient-to-r dark:bg-violet-150 dark:from-violet-500 dark:to-violet-500 dark:text-violet-800 dark:hover:text-violet-100"
-          onClick={initializeDemo}
-        >
+        <button className={testDemoButtonTwClass} onClick={initializeDemo}>
           Tester la démo
         </button>
       </div>
@@ -52,20 +63,17 @@ function BillsList() {
       {bills.some((bill: billProps) => bill.isDummy) && (
         <div
           role="row"
-          className=" grid bg-gray-100 px-2 pt-2 text-center dark:bg-violet-850 dark:pb-2"
+          className="grid bg-gray-100 px-2 pt-2 text-center dark:bg-violet-850 dark:pb-2"
         >
           <button
-            className="button is-filled justify-self-center bg-gradient-to-r dark:bg-violet-150 dark:from-violet-500 dark:to-violet-500 dark:text-violet-800 dark:hover:text-violet-100"
+            className={testDemoButtonTwClass}
             onClick={() => dispatch(removeDummyBills(bills))}
           >
             Retirer les factures fictives
           </button>
         </div>
       )}
-      <ol
-        role="rowgroup"
-        className="grid gap-[1px] overflow-hidden bg-gray-100/80 p-1 pb-2 transition-all duration-300 ease-in-out dark:bg-violet-800 dark:p-0 lg:px-2 lg:pt-2"
-      >
+      <ol role="rowgroup" className={BillsListTwClass}>
         <AnimatePresence>
           {bills.map((bill: billProps) => (
             <BillsListItem key={bill.id} bill={bill} />

@@ -1,0 +1,40 @@
+@layer components {
+  .grid-cols-bills {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+      "customer customer customer amount amount delete"
+      "description description description description description description"
+      "status status status status status status";
+
+    @media screen and (min-width: theme("screens.sm")) {
+      grid-template-areas:
+        "customer customer customer amount amount delete"
+        "description description description status status status";
+    }
+
+    @media screen and (min-width: theme("screens.xl")) {
+      grid-template-areas: none;
+      grid-template-columns: 15% 12ch 30% 1fr 4em;
+
+      > [class*="col-bills-"] {
+        grid-area: auto;
+      }
+    }
+  }
+
+  .col-bills-customer {
+    grid-area: customer;
+  }
+  .col-bills-amount {
+    grid-area: amount;
+  }
+  .col-bills-delete {
+    grid-area: delete;
+  }
+  .col-bills-description {
+    grid-area: description;
+  }
+  .col-bills-status {
+    grid-area: status;
+  }
+}

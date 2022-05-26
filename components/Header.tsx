@@ -1,36 +1,62 @@
-import { ReactElement, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import HeaderAuth from "./HeaderAuth"
+import { EmojiHandHi } from "./IconsEmoji.index"
 import { RootState } from "@store/store"
 import ThemeColorSwitch from "./ThemeColorSwitch"
+import UserMenu from "./UserMenu"
+import { openAuthModal } from "@store/features/authModalSlice"
+import { userProps } from "@localTypes/userProps"
 
-function Header(): ReactElement {
-  const user = useSelector((store: RootState) => store.user)
-  const dispatch = useDispatch()
-  const [displayName, setDisplayName] = useState(
-    user.data.email ? user.data.email.split("@")[0] : ""
-  )
-  useEffect(() => {
-    setDisplayName(user.data.username ? user.data.username.split(" ")[0] : "")
-  }, [user])
+function Header() {
+  const user = useSelector((store: RootState) => store.user.data)
+  const title = getTitle(user)
+
   return (
-    <header className="flex justify-around bg-violet-500 px-4 py-8 dark:bg-violet-850 lg:px-3">
-      <h1
-        className={`shadow-title relative flex grow items-center gap-2 font-bold leading-none text-white`}
-      >
-        <span className="shake -rotate-12 text-4xl">🖐 </span>
-        <span className="relative z-10 text-2xl">Bonjour {displayName}</span>
-        <span className="absolute text-5xl uppercase opacity-10" aria-hidden>
-          Bonjour {displayName}
-        </span>
-      </h1>
+    <header className="flex justify-around bg-violet-500 px-4 py-8 dark:bg-violet-850 lg:col-span-2 lg:px-3">
+      <HeaderTitle title={title} />
       <div className="relative flex grow justify-end gap-2">
         <ThemeColorSwitch />
-        <HeaderAuth />
+        {user.id ? <UserMenu /> : <SignInButton />}
       </div>
     </header>
   )
+}
+
+const headerTitleClassName = `relative flex grow items-center gap-2
+font-bold leading-none text-white`
+
+function HeaderTitle({ title = "Cockpit" }) {
+  return (
+    <h1 className={headerTitleClassName}>
+      {title.includes("Bonjour") && (
+        <EmojiHandHi className="origin-bottom -rotate-12 animate-shake text-4xl" />
+      )}
+      <span className="relative z-10 text-2xl">{title}</span>
+      <span className="absolute text-5xl uppercase opacity-10" aria-hidden>
+        {title}
+      </span>
+    </h1>
+  )
+}
+
+function SignInButton() {
+  const dispatch = useDispatch()
+  return (
+    <button
+      className="button is-outline flex-col leading-none text-white ring-white hocus:text-violet-500"
+      onClick={() => dispatch(openAuthModal())}
+    >
+      Connexion <br />
+      <small className="opacity-80">Inscription</small>
+    </button>
+  )
+}
+
+function getTitle(user: userProps) {
+  if (user.username) return `Bonjour ${user.username}`
+  if (user.nameFromAuthProvider)
+    return `Bonjour ${user.nameFromAuthProvider.split(" ")[0]}`
+  return "Cockpitt"
 }
 
 export default Header
