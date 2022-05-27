@@ -11,7 +11,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const store = getStore(pageProps.initialState)
   return (
     <>
-      <Script src="/js/darkModeCheck.js" strategy="beforeInteractive" />
       <SessionProvider session={session}>
         <Provider store={store}>
           <IconContext.Provider
