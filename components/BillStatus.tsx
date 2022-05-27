@@ -94,9 +94,10 @@ function BillStatus({ bill }: { bill: billProps }) {
         <p>{getRelativeTime(bill)}</p>
         {isLate && (
           <button
-            className="button is-filled bg-violet-25 from-violet-500 to-violet-500 text-violet-500"
+            className={`
+            ${!isLate && "hidden"}
+            button is-filled bg-violet-25 from-violet-500 to-violet-500 text-violet-500`}
             onClick={handleMarkAsReminded}
-            hidden={!isLate}
           >
             Relancée ?
           </button>

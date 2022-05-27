@@ -102,17 +102,19 @@ function BillsFormAddNew() {
   return (
     <div className="flex flex-col p-2" role="row">
       <button
-        className="button is-filled mx-auto gap-1 dark:text-white lg:hidden"
-        hidden={isSmallScreen && !formIsHidden}
+        className={`
+        ${isSmallScreen && !formIsHidden && "hidden"}
+        button is-filled mx-auto gap-1 dark:text-white lg:hidden`}
         onClick={() => setFormIsHidden(false)}
       >
         Ajouter une facture
         <IconPlus />
       </button>
       <form
-        className={`xl:grid-cols-bills grid gap-2 lg:grid-cols-[25ch_15ch_1fr_4em]`}
+        className={`
+        ${isSmallScreen && formIsHidden && "hidden"}
+        xl:grid-cols-bills grid gap-2 lg:grid-cols-[25ch_15ch_1fr_4em]`}
         onSubmit={handleSubmit}
-        hidden={isSmallScreen && formIsHidden}
       >
         <button
           className="button is-ghost ml-auto dark:text-violet-100 lg:hidden"

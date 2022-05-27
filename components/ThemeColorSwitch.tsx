@@ -4,15 +4,10 @@ import { useEffect } from "react"
 import { useState } from "react"
 
 function ThemeColorSwitch(): JSX.Element | null {
-  const [darkMode, setDarkMode] = useState<Boolean>(false)
-  const [loading, setLoading] = useState<Boolean>(true)
-
-  useEffect(() => {
-    if (document.documentElement.classList.contains("dark")) {
-      setDarkMode(true)
-    }
-    setLoading(false)
-  }, [])
+  const isDarkMode =
+    typeof window !== "undefined" &&
+    document.documentElement.classList.contains("dark")
+  const [darkMode, setDarkMode] = useState(isDarkMode)
 
   useEffect(() => {
     document.head.insertAdjacentHTML(
@@ -39,7 +34,7 @@ function ThemeColorSwitch(): JSX.Element | null {
     }
   }, [darkMode])
 
-  if (loading) return null
+  // if (loading) return null
 
   return (
     <button
