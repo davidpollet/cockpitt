@@ -1,7 +1,9 @@
 import FacebookProvider from "next-auth/providers/facebook"
 import GoogleProvider from "next-auth/providers/google"
+import { MongoClient } from "mongodb"
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import NextAuth from "next-auth"
-import TwitterProvider from "next-auth/providers/twitter"
+import clientPromise from "@helpers/db"
 
 export default NextAuth({
   providers: [
@@ -14,4 +16,8 @@ export default NextAuth({
       clientSecret: process.env.FACEBOOK_SECRET || "",
     }),
   ],
+  adapter: MongoDBAdapter(MongoClient.connect(`${process.env.MONGODB_URI}`)),
+  session: {
+    strategy: "jwt",
+  },
 })

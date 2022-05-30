@@ -58,9 +58,7 @@ function SignInButton() {
 }
 
 function getTitle(user: userProps) {
-  if (user.username) return `Bonjour ${user.username}`
-  if (user.nameFromAuthProvider)
-    return `Bonjour ${user.nameFromAuthProvider.split(" ")[0]}`
+  if (user.name) return `Bonjour ${user.name.split(" ")[0]}`
   return "Cockpitt"
 }
 

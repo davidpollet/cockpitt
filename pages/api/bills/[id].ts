@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
+import { MongoClient } from "mongodb"
 import { connectToDatabase } from "@helpers/db"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {

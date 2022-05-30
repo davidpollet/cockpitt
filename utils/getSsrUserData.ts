@@ -1,9 +1,15 @@
+import { MongoClient, WithoutId } from "mongodb"
+
 import FetchWrapper from "@helpers/FetchWrapper"
 import { GetServerSidePropsContext } from "next"
+import { billProps } from "@localTypes/billProps"
+import { connectToDatabase } from "@helpers/db"
+import { dispatch } from "react-hot-toast/dist/core/store"
 import { getSession } from "next-auth/react"
 import getStore from "@store/store"
 import { nanoid } from "nanoid"
 import { setUserData } from "@store/features/userSlice"
+import { userProps } from "@localTypes/userProps"
 
 function getSsrUserData(
   dataApiPath: string,
@@ -30,22 +36,28 @@ function getSsrUserData(
 
     const api = new FetchWrapper(`${URL}/api`)
 
-    const userSession = {
-      email: session.user?.email || "",
-      nameFromAuthProvider: session.user?.name,
-      avatar: session.user?.image,
-      id: nanoid(),
-    }
+    if (session.user?.email) {
+      const client = await connectToDatabase()
+      const db = client.db()
+      const email = session.user.email
+      const usersCollection = db.collection("users")
+      const user: any = await usersCollection
+        .findOne({ email }, { projection: { _id: 0, emailVerified: 0 } })
+        .then((response) => (response ? response : null))
 
-    let userDB = await api.get(`/user/${userSession.email}`)
+      if (!user.id) {
+        user.id = nanoid()
+        usersCollection.updateOne({ email }, { $set: { id: user.id } })
+      }
 
-    if (userDB) {
-      store.dispatch(setUserData(userDB))
-      const userData = await api.get(`${dataApiPath}/${userDB.id}`)
-      store.dispatch(dataDispatchFn(userData))
-    } else {
-      await api.post(`/user/`, userSession)
-      store.dispatch(setUserData(userSession))
+      const billsCollection = db.collection("bills")
+      const bills: any = await billsCollection
+        .find({ owner: user.id }, { projection: { _id: 0 } })
+        .toArray()
+        .then((response) => (response ? response : []))
+
+      store.dispatch(setUserData(user))
+      store.dispatch(dataDispatchFn(bills))
     }
 
     return {

@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
+import { MongoClient } from "mongodb"
 import { connectToDatabase } from "@helpers/db"
+import { nanoid } from "nanoid"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   let client
@@ -24,16 +26,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     case "GET":
       try {
         const usersCollection = client.db().collection("users")
-        await usersCollection.findOne({ email }).then((response) => {
-          if (!response) {
-            res.status(404).json({
-              error: "Aucun utilisateur trouvé",
-              message: "Aucun utilisateur trouvé",
-            })
-          } else {
-            res.status(200).json(response)
-          }
-        })
+        await usersCollection
+          .findOne({ email }, { projection: { _id: 0 } })
+          .then((response) => {
+            if (!response) {
+              res.status(404).json({
+                error: "Aucun utilisateur trouvé",
+                message: "Aucun utilisateur trouvé",
+              })
+            } else {
+              const user = { ...response }
+              if (!user.id) {
+                user.id = nanoid()
+                usersCollection.updateOne({ email }, { $set: { id: user.id } })
+              }
+              res.status(200).json(user)
+              // res.status(200).json(response)
+            }
+          })
       } catch (error) {
         res.status(500).json({
           error,
