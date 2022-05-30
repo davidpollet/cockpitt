@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-import createUser from "@helpers/createUser"
 import { userProps } from "utils/types/userProps"
 
 const initialState = {
