@@ -1,5 +1,6 @@
 import { EmojiMoon, EmojiSun } from "./IconsEmoji.index"
 
+import Loading from "./Loading"
 import { useEffect } from "react"
 import { useState } from "react"
 
@@ -8,6 +9,7 @@ function ThemeColorSwitch(): JSX.Element | null {
     typeof window !== "undefined" &&
     document.documentElement.classList.contains("dark")
   const [darkMode, setDarkMode] = useState(isDarkMode)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     document.head.insertAdjacentHTML(
@@ -34,8 +36,13 @@ function ThemeColorSwitch(): JSX.Element | null {
     }
   }, [darkMode])
 
-  // if (loading) return null
+  useEffect(() => {
+    setIsLoading(false)
+  }, [])
 
+  if (isLoading) return <Loading />
+
+  console.log(darkMode)
   return (
     <button
       type="button"
@@ -44,13 +51,14 @@ function ThemeColorSwitch(): JSX.Element | null {
       aria-hidden
     >
       <EmojiSun
-        className={`${!darkMode && "translate-y-0 opacity-100"} ${
-          darkMode && "translate-y-8 opacity-0"
+        className={`${
+          !darkMode ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
         } transition duration-300`}
       />
       <EmojiMoon
-        className={`${darkMode && "translate-y-0 opacity-100"}
-        ${!darkMode && "translate-y-10 opacity-0"}
+        className={`${
+          darkMode ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }
         absolute transition duration-300`}
         style={{ filter: "drop-shadow(0 0 10px lightyellow)" }}
       />
