@@ -3,7 +3,6 @@ import GoogleProvider from "next-auth/providers/google"
 import { MongoClient } from "mongodb"
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import NextAuth from "next-auth"
-import clientPromise from "@helpers/db"
 
 export default NextAuth({
   providers: [
