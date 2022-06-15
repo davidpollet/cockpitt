@@ -14,9 +14,13 @@ function getSsrUserData(
   }
 ) {
   return async function (context: GetServerSidePropsContext) {
+    const dev = process.env.NODE_ENV !== "production"
+    const server = dev
+      ? "http://localhost:3000"
+      : "https://cockpitt.vercel.app/"
+
     const session = await getSession({ req: context.req })
-    const URL = process.env.NEXT_PUBLIC_SITE_URL
-    const api = new FetchWrapper(`${URL}/api`)
+    const api = new FetchWrapper(`${server}/api`)
     if (!session) {
       nookies.destroy(context, USER_ID_COOKIE_NAME)
 
