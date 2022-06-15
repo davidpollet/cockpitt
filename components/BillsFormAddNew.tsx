@@ -1,15 +1,12 @@
 import { FormEvent, useEffect, useRef, useState } from "react"
 import { IconCheck, IconClose, IconPlus } from "@components/Icons.index"
-import { useDispatch, useSelector } from "react-redux"
 
-import FetchWrapper from "@helpers/FetchWrapper"
 import Loading from "./Loading"
-import { RootState } from "@store/store"
-import { addNewBill } from "@store/features/incomeSlice"
 import classNames from "classnames"
 import createBill from "@helpers/createBill"
 import isValidNumber from "@helpers/isValidNumber"
-import toast from "react-hot-toast"
+import showToast from "@helpers/showToast"
+import { useAddNewBill } from "@hooks/billsHooks"
 import { useWindowWidth } from "@react-hook/window-size"
 
 const inputStyles = classNames([`input-text grow lg:min-w-0`])
@@ -20,22 +17,13 @@ const buttonSubmitClassName = classNames([
 ])
 
 function BillsFormAddNew() {
-  const dispatch = useDispatch()
-  const user = useSelector((store: RootState) => store.user.data)
-
   const windowWidth = useWindowWidth()
-
-  const billsApi = new FetchWrapper("/api/bills")
 
   const [isSmallScreen, setIsSmallScreen] = useState(true)
   const [formIsHidden, setFormIsHidden] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
   const [isSubmited, setIsSubmited] = useState(false)
   const firstInputRef = useRef<HTMLInputElement>(null)
-
-  const showToast = (message: string, type: "error" | "success" | "") => {
-    type ? toast[type](message) : toast(message, { duration: 3000 })
-  }
+  const { submitNewBill, isAdding, user } = useAddNewBill()
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -48,7 +36,6 @@ function BillsFormAddNew() {
     }
 
     amount = parseFloat(amount.value.replace(",", "."))
-    setIsLoading(true)
 
     const bill = createBill({
       amount,
@@ -56,25 +43,10 @@ function BillsFormAddNew() {
       description: description.value,
     })
 
-    if (user.id) {
-      bill.owner = user.id
-      await billsApi.post("/", bill).then((res) => {
-        if (res.ok) {
-          dispatch(addNewBill(bill))
-          setIsSubmited(true)
-        } else {
-          showToast(
-            "La facture n'a pas pu être envoyé à la base de donnée. Réessayez s'il vous plait",
-            "error"
-          )
-        }
-      })
-    } else {
-      dispatch(addNewBill(bill))
-      setIsSubmited(true)
-    }
+    bill.owner = user?.id ? user.id : "demo"
+    submitNewBill(bill)
 
-    setIsLoading(false)
+    setIsSubmited(true)
     form.reset()
   }
 
@@ -171,26 +143,26 @@ function BillsFormAddNew() {
             aria-label="description"
             name="description"
             rows={1}
-            className={`${inputStyles} resize-none`}
+            className={`${inputStyles} resize-none dark:text-violet-100`}
             style={{ scrollbarWidth: "none" }}
           />
           <button
             type="submit"
             className={buttonSubmitClassName}
-            disabled={isLoading}
+            disabled={isAdding}
           >
             <IconPlus
               className={`${
-                isLoading || isSubmited
+                isAdding || isSubmited
                   ? "translate-y-3 scale-0"
                   : "scale-1 translate-y-0"
               } transition-all`}
             />
             <Loading
               size={24}
-              color="stroke-white"
+              color="white"
               className={`absolute transition-all ${
-                isLoading ? "scale-1 translate-y-0" : "translate-y-3 scale-0"
+                isAdding ? "scale-1 translate-y-0" : "translate-y-3 scale-0"
               }`}
             />
             <IconCheck

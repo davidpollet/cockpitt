@@ -1,5 +1,6 @@
 import {
   BsCheck as IconCheck,
+  BsThreeDotsVertical as IconMore,
   BsCardChecklist as IconTurnover,
 } from "react-icons/bs"
 import {
@@ -10,13 +11,21 @@ import {
   IoAlertOutline as IconExclamation,
   IoLogoGithub as IconGithub,
   IoLogoGoogle as IconGoogle,
+  IoGridOutline as IconGrid,
+  IoInformationCircleOutline as IconInfo,
+  IoListOutline as IconList,
   IoExitOutline as IconLogOut,
+  IoReloadOutline as IconRefresh,
   IoSettingsOutline as IconSettings,
-  IoTrashBinOutline as IconTrashOutline,
   IoLogoTwitter as IconTwitter,
   IoEyeOffOutline as IconVisibilityOff,
   IoEyeOutline as IconVisibilityOn,
+  IoWarning as IconWarning,
 } from "react-icons/io5"
+import {
+  FiThumbsDown as IconThumbsDown,
+  FiThumbsUp as IconThumbsUp,
+} from "react-icons/fi"
 
 import { FaFacebookF as IconFacebook } from "react-icons/fa"
 import { GoPlus as IconPlus } from "react-icons/go"
@@ -24,13 +33,76 @@ import { CgRepeat as IconRepeat } from "react-icons/cg"
 import { MdPendingActions as IncomesPending } from "react-icons/md"
 import { SVGProps } from "react"
 
+function IconPlay(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      width="1em"
+      height="1em"
+      className="icon"
+      {...props}
+    >
+      <path
+        d="M112 111v290c0 17.44 17 28.52 31 20.16l247.9-148.37c12.12-7.25 12.12-26.33 0-33.58L143 90.84c-14-8.36-31 2.72-31 20.16z"
+        fill="none"
+        stroke="currentColor"
+        strokeMiterlimit="10"
+        strokeWidth="48"
+      />
+    </svg>
+  )
+}
+
+function IconTrashOutline(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      width="1em"
+      height="1em"
+      className="icon"
+      {...props}
+    >
+      <path
+        d="m432 144-28.67 275.74A32 32 0 0 1 371.55 448H140.46a32 32 0 0 1-31.78-28.26L80 144"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="36"
+      />
+      <rect
+        x="32"
+        y="64"
+        width="448"
+        height="80"
+        rx="16"
+        ry="16"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="36"
+      />
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="36"
+        d="M312 240 200 352m112 0L200 240"
+      />
+    </svg>
+  )
+}
+
 function IconPaperPlane(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="1.5em"
       xmlns="http://www.w3.org/2000/svg"
       height="1.5em"
-      className={props.className}
       viewBox="0 0 256 256"
       {...props}
     >
@@ -59,26 +131,67 @@ function IconCashed(props: SVGProps<SVGSVGElement>) {
   )
 }
 
+function IconSuiviCA(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={16}
+      height="16"
+      viewBox="0 0 1100 1400"
+      {...props}
+    >
+      <path
+        d="M1050 200c0-82.787-67.213-150-150-150H200c-82.787 0-150 67.213-150 150v1000c0 82.787 67.213 150 150 150h700c82.787 0 150-67.213 150-150V200Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="100"
+      />
+      <path
+        d="M300 300h500M300 550h500M300 800h250"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="100"
+        strokeLinecap="round"
+      />
+      <path
+        d="M561.684 1023.75c-17.272 0-31.279-13.977-31.279-31.278s14.007-31.278 31.279-31.278h27.651c28.942-81.998 106.356-140.752 199.115-140.752h23.459c17.301 0 31.278 14.007 31.278 31.278 0 17.272-13.977 31.279-31.278 31.279H788.45c-56.594 0-105.759 31.669-130.879 78.195h123.06c17.3 0 31.278 13.977 31.278 31.278s-13.978 31.278-31.278 31.278H640.074c-.097 2.542-.195 5.181-.195 7.82v15.639c0 2.639.098 5.278.195 7.819h140.557c17.3 0 31.278 13.978 31.278 31.278 0 17.301-13.978 31.279-31.278 31.279h-123.06c25.12 46.526 74.285 78.195 130.879 78.195h23.459c17.301 0 31.278 13.977 31.278 31.278s-13.977 31.278-31.278 31.278H788.45c-92.759 0-170.173-58.744-199.115-140.751h-27.651c-17.272 0-31.279-13.978-31.279-31.279 0-17.3 14.007-31.278 31.279-31.278h15.785a210.22 210.22 0 0 1-.146-7.819v-15.639c0-2.639.049-5.181.146-7.82h-15.785Z"
+        fillRule="nonzero"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
 export {
   IconCashed,
   IconCheck,
-  IconChevronRight,
   IconChevronDown,
+  IconChevronRight,
+  IconClose,
   IconErrorCircle,
   IconExclamation,
+  IconFacebook,
+  IconGithub,
+  IconGoogle,
+  IconGrid,
+  IconList,
+  IconLogOut,
+  IconInfo,
+  IconMore,
   IconPaperPlane,
+  IconPlay,
   IconPlus,
+  IconRefresh,
   IconRepeat,
+  IconSettings,
+  IconSuiviCA,
+  IconThumbsDown,
+  IconThumbsUp,
   IconTrashOutline,
   IconTurnover,
+  IconTwitter,
   IconVisibilityOff,
   IconVisibilityOn,
-  IconClose,
+  IconWarning,
   IncomesPending,
-  IconFacebook,
-  IconGoogle,
-  IconTwitter,
-  IconSettings,
-  IconGithub,
-  IconLogOut,
 }

@@ -5,9 +5,9 @@ import { connectToDatabase } from "@helpers/db"
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   let client: any
   let db: any
-  const bill = req.body
+  const project = req.body
 
-  if (bill.isDummy) {
+  if (project.isDummy) {
     return res.status(200)
   }
 
@@ -23,13 +23,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   await db
-    .collection("bills")
-    .insertOne(bill)
-    .then(() => res.status(201).json({ message: "Facture insérée !" }))
+    .collection("todosProjects")
+    .insertOne(project)
+    .then(() => res.status(201).json({ message: "Projet inséré !" }))
     .catch(() =>
-      res
-        .status(500)
-        .json({ error: "Erreur pendant l'insertion de la facture" })
+      res.status(500).json({ error: "Erreur pendant l'insertion du projet" })
     )
     .finally(() => client.close())
 }

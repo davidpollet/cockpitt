@@ -26,9 +26,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (method) {
     case "GET":
       try {
-        const billsCollection = client.db().collection("bills")
-        await billsCollection
-          .find({ owner: id }, { projection: { _id: 0 } })
+        const ProjectCollection = client.db().collection("todosProjects")
+        await ProjectCollection.find({ owner: id }, { projection: { _id: 0 } })
           .toArray()
           .then((response) => {
             res.status(200).json(response)
@@ -44,18 +43,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     case "PATCH":
     case "PUT":
       try {
-        const bill = req.body
+        const project = req.body
         await db
-          .collection("bills")
-          .updateOne({ id: id }, { $set: { ...bill } })
+          .collection("todosProjects")
+          .updateOne({ id: id }, { $set: { ...project } })
           .then((response) => {
             if (response.modifiedCount === 0) {
               res.status(404).json({
-                message: "Aucune facture correspondante n'a été trouvée",
+                message: "Aucune Projet correspondante n'a été trouvée",
               })
             }
           })
-        res.status(200).json({ message: "Facture modifiée !" })
+        res.status(200).json({ message: "Projet modifiée !" })
       } catch (error) {
         res.status(500).json({
           error,
@@ -68,19 +67,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       try {
         let { id } = req.query
         await db
-          .collection("bills")
+          .collection("todosProjects")
           .deleteOne({ id })
           .then((response) => {
             if (response.deletedCount === 0) {
-              return res.status(404).json({ message: "Facture non trouvée !" })
+              return res.status(404).json({ message: "Projet non trouvé !" })
             } else {
-              res.status(200).json({ message: "Facture supprimée !" })
+              res.status(200).json({ message: "Projet supprimé !" })
             }
           })
       } catch (error) {
         res.status(500).json({
           error,
-          message: "Impossible de suprimer les données",
+          message: "Impossible de suprimer le projet",
         })
       }
       break

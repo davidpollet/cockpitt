@@ -5,24 +5,15 @@ import {
   IconPaperPlane,
   IconRepeat,
 } from "./Icons.index"
-import { useDispatch, useSelector } from "react-redux"
 
-import FetchWrapper from "@helpers/FetchWrapper"
-import { RootState } from "@store/store"
 import { billProps } from "@localTypes/billProps"
 import classnames from "classnames"
 import getRelativeTime from "@helpers/getRelativeTime"
 import time from "@helpers/dateHelpers"
-import toast from "react-hot-toast"
-import { updateBill } from "@store/features/incomeSlice"
+import { useUpdateBill } from "@hooks/billsHooks"
 
 function BillStatus({ bill }: { bill: billProps }) {
-  const user = useSelector((state: RootState) => state.user.data)
-  const dispatch = useDispatch()
-  const billsApi = new FetchWrapper("/api/bills")
-  const showToast = (message: string, type: "error" | "success" | "") => {
-    type ? toast[type](message) : toast(message, { duration: 3000 })
-  }
+  const { updateBill } = useUpdateBill()
 
   const isLate =
     !bill.cashedAt &&
@@ -44,7 +35,7 @@ function BillStatus({ bill }: { bill: billProps }) {
     }
 
     const value = bill[property] ? null : todayTime
-    const savedBill = bill
+
     const updatedBill = {
       ...bill,
       sentAt,
@@ -53,24 +44,14 @@ function BillStatus({ bill }: { bill: billProps }) {
       updatedAt: todayTime,
     }
 
-    dispatch(updateBill(updatedBill))
-    if (user.id) {
-      billsApi.put(`/${bill.id}`, updatedBill).then(async (response) => {
-        if (!response.ok) {
-          await response.text().then((text) => {
-            const { message } = JSON.parse(text)
-            dispatch(updateBill(savedBill))
-            showToast(message, "error")
-          })
-        }
-      })
-    }
+    updateBill(updatedBill)
   }
 
   function handleMarkAsReminded() {
     const todayTime = new Date().getTime()
     const remindedAt = [todayTime, ...bill.remindedAt]
-    dispatch(updateBill({ ...bill, remindedAt, updatedAt: todayTime }))
+    const updatedBill = { ...bill, remindedAt, updatedAt: todayTime }
+    updateBill(updatedBill)
   }
 
   const stepIsDisabled =

@@ -1,6 +1,6 @@
 @layer components {
   .button {
-    @apply inline-flex items-center gap-1 rounded-md border-0 bg-center bg-no-repeat px-4 py-2 transition-all duration-[250ms] hover:cursor-pointer disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex items-center gap-1 rounded-md border-0 bg-center bg-no-repeat px-4 py-2 outline-none transition-all duration-[250ms] hover:cursor-pointer disabled:pointer-events-none disabled:opacity-50;
   }
 
   .is-filled {
@@ -8,7 +8,7 @@
   }
 
   .is-outline {
-    @apply text-violet-500 ring-2 ring-inset ring-violet-500 hover:text-white hover:ring-[1.75em];
+    @apply text-violet-500 ring-2 ring-inset ring-violet-500 hover:text-white hocus:ring-[1.75em];
   }
 
   .is-ghost {

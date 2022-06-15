@@ -2,20 +2,20 @@ import authModalSlice from "./features/authModalSlice"
 import { combineReducers } from "redux"
 import { configureStore } from "@reduxjs/toolkit"
 import incomeReducer from "./features/incomeSlice"
+import todosSlice from "./features/todosSlice"
 import userSlice from "./features/userSlice"
 
 const reducers = combineReducers({
   income: incomeReducer,
+  todos: todosSlice,
   user: userSlice,
   authModal: authModalSlice,
 })
 
-export default function getStore(incomingPreloadState?: RootState) {
-  const store = configureStore({
-    reducer: reducers,
-    preloadedState: incomingPreloadState,
-  })
-  return store
-}
+const store = configureStore({
+  reducer: reducers,
+})
+
+export default store
 
 export type RootState = ReturnType<typeof reducers>

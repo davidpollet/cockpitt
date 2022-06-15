@@ -32,7 +32,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   await db
     .collection("users")
     .insertOne(user)
-    .then(() => res.status(201).json({ message: "bill insered !" }))
+    .then(() =>
+      res.status(201).json({ message: "Utilisateur créé !", data: user })
+    )
     .catch(() => res.status(500).json({ error: "An error occured" }))
     .finally(() => client.close())
 }

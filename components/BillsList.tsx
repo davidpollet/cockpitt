@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { AnimatePresence } from "framer-motion"
 import BillsListItem from "./BillsListItem"
+import Loading from "./Loading"
 import { RootState } from "@store/store"
 import { billProps } from "@localTypes/billProps"
 import classNames from "classnames"
+import useIsMounted from "@hooks/useIsMounted"
 
 const BillsListTwClass = classNames([
   "grid gap-[1px] bg-gray-100/80 p-1 pb-2 transition-all duration-300 ease-in-out",
@@ -13,16 +15,18 @@ const BillsListTwClass = classNames([
   " lg:px-2 lg:pt-2",
 ])
 
-const testDemoButtonTwClass = classNames([
+export const testDemoButtonTwClass = classNames([
   "button is-outline justify-self-center",
   "dark:ring-violet-100 dark:from-violet-300 dark:to-violet-300 dark:text-violet-100 dark:hover:text-violet-600",
 ])
 
 function BillsList() {
-  const dispatch = useDispatch()
   const getBills = useSelector(
     (store: RootState): billProps[] => store.income.bills
   )
+  const isMounted = useIsMounted()
+  const dispatch = useDispatch()
+
   const billsNotSent = getBills
     .filter((bill: billProps) => !bill.sentAt)
     .sort(
@@ -39,9 +43,12 @@ function BillsList() {
 
   const bills = billsNotSent.concat(billsSent, billsCashed)
 
-  function initializeDemo() {
-    dispatch(addDummyBills())
-  }
+  if (!isMounted)
+    return (
+      <div className="flex justify-center p-2">
+        <Loading />
+      </div>
+    )
 
   if (bills.length === 0)
     return (
@@ -52,7 +59,10 @@ function BillsList() {
         <p className="text-xl font-bold text-violet-500 dark:text-white lg:text-2xl">
           Aucune facture à afficher
         </p>
-        <button className={testDemoButtonTwClass} onClick={initializeDemo}>
+        <button
+          className={testDemoButtonTwClass}
+          onClick={() => dispatch(addDummyBills())}
+        >
           Tester la démo
         </button>
       </div>

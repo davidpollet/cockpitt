@@ -1,12 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { MongoClient } from "mongodb"
 import { connectToDatabase } from "@helpers/db"
 import { nanoid } from "nanoid"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   let client
   let db
+  const { email } = req.query
+
+  if (!email) {
+    res.status(400).send("L'email est requis")
+    return
+  }
 
   try {
     client = await connectToDatabase()
@@ -19,7 +24,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return
   }
 
-  const { email } = req.query
   const { method } = req
 
   switch (method) {

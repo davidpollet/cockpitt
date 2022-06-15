@@ -1,15 +1,9 @@
-import { MongoClient, WithoutId } from "mongodb"
-
 import FetchWrapper from "@helpers/FetchWrapper"
 import { GetServerSidePropsContext } from "next"
-import { billProps } from "@localTypes/billProps"
-import { connectToDatabase } from "@helpers/db"
-import { dispatch } from "react-hot-toast/dist/core/store"
+import USER_ID_COOKIE_NAME from "@consts/userIdCookie"
 import { getSession } from "next-auth/react"
-import getStore from "@store/store"
 import { nanoid } from "nanoid"
-import { setUserData } from "@store/features/userSlice"
-import { userProps } from "@localTypes/userProps"
+import nookies from "nookies"
 
 function getSsrUserData(
   dataApiPath: string,
@@ -21,8 +15,11 @@ function getSsrUserData(
 ) {
   return async function (context: GetServerSidePropsContext) {
     const session = await getSession({ req: context.req })
-
+    const URL = process.env.NEXT_PUBLIC_SITE_URL
+    const api = new FetchWrapper(`${URL}/api`)
     if (!session) {
+      nookies.destroy(context, USER_ID_COOKIE_NAME)
+
       if (options.protectedPage) {
         context.res.writeHead(302, { Location: options.redirectTo })
         context.res.end()
@@ -31,38 +28,39 @@ function getSsrUserData(
         props: {},
       }
     }
-    const store = getStore()
-    const URL = process.env.SITE_URL
 
-    const api = new FetchWrapper(`${URL}/api`)
+    let { userId } = nookies.get(context)
+    let user = {
+      ...session.user,
+      id: userId,
+    }
 
-    if (session.user?.email) {
-      const client = await connectToDatabase()
-      const db = client.db()
-      const email = session.user.email
-      const usersCollection = db.collection("users")
-      const user: any = await usersCollection
-        .findOne({ email }, { projection: { _id: 0, emailVerified: 0 } })
-        .then((response) => (response ? response : null))
-
-      if (!user.id) {
-        user.id = nanoid()
-        usersCollection.updateOne({ email }, { $set: { id: user.id } })
+    if (!user.id) {
+      let userDb = await api.get(`/user/${user.email}`)
+      if (userDb.id) {
+        user.id = userDb.id
+      } else {
+        userId = nanoid()
+        try {
+          await api.post(`/user/`, { ...user, id: userId })
+          user.id = userId
+        } catch (err) {
+          throw new Error("Erreur pendant la création de l'utilisateur")
+        }
       }
 
-      const billsCollection = db.collection("bills")
-      const bills: any = await billsCollection
-        .find({ owner: user.id }, { projection: { _id: 0 } })
-        .toArray()
-        .then((response) => (response ? response : []))
-
-      store.dispatch(setUserData(user))
-      store.dispatch(dataDispatchFn(bills))
+      nookies.set(context, USER_ID_COOKIE_NAME, user.id, {
+        expires: new Date(session.expires),
+        SameSite: "strict",
+      })
     }
+
+    const userData = await api.get(`${dataApiPath}/${user.id}`)
 
     return {
       props: {
-        initialState: store.getState(),
+        user,
+        userData,
       },
     }
   }

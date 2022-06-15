@@ -1,10 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion"
-import {
-  IconChevronDown,
-  IconClose,
-  IconLogOut,
-  IconSettings,
-} from "./Icons.index"
+import { IconChevronDown, IconClose, IconLogOut } from "./Icons.index"
 
 import { Menu } from "@headlessui/react"
 import UserAvatar from "./UserAvatar"

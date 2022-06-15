@@ -7,10 +7,10 @@
     @apply dark:bg-white/10 dark:text-white/60;
     @apply dark:text-violet-100 dark:hover:bg-white/20;
     @apply dark:focus:bg-violet-800 dark:focus:text-violet-100 dark:focus:ring-violet-100 dark:focus:ring-offset-0;
+  }
 
-    &::placeholder {
-      color: currentColor;
-      opacity: 0.5;
-    }
+  input::placeholder {
+    color: currentColor;
+    opacity: 0.5;
   }
 }

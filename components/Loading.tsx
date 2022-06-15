@@ -1,6 +1,7 @@
-function Loading({ color = "stroke-violet-400", size = 32, className = "" }) {
+function Loading({ color = "violet-400", size = 32, className = "" }) {
+  const colorClass = `stroke-${color}`
   return (
-    <div className={className}>
+    <span className={`${className} z-50 block`}>
       <svg
         viewBox="25 25 50 50"
         width={size}
@@ -15,11 +16,11 @@ function Loading({ color = "stroke-violet-400", size = 32, className = "" }) {
           fill="none"
           strokeDasharray="1,200"
           strokeDashoffset="0"
-          className={`animate-loading ${color}`}
+          className={`animate-loading ${colorClass}`}
           strokeLinecap="round"
         />
       </svg>
-    </div>
+    </span>
   )
 }
 

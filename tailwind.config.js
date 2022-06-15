@@ -43,7 +43,6 @@ module.exports = {
         loading: 'loading 1200ms ease-in-out infinite',
         fadeIn: 'fadeIn 600ms ease forwards',
         fadeOut: 'fadeOut 600ms ease forwards',
-        fadeOut: 'fadeOut 600ms ease forwards',
         shake: '1000ms ease shake backwards'
       },
       keyframes: {
@@ -90,6 +89,9 @@ module.exports = {
         'w-0/h-full': '0 100%',
         'w-full/h-0': '100% 0',
         'w-full/h-full': '100% 100%'
+      },
+      borderRadius: {
+        inherit: 'inherit'
       }
     },
     screens: {

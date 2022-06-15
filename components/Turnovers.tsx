@@ -4,6 +4,7 @@ import { SVGProps, useEffect, useState } from "react"
 import { RootState } from "@store/store"
 import animateNumber from "@helpers/animateNumbers"
 import formatAmount from "@helpers/formatAmount"
+import turnoverFiltered from "@helpers/turnoverFiltered"
 import { useSelector } from "react-redux"
 
 function Turnover({
@@ -14,7 +15,7 @@ function Turnover({
   icon: SVGProps<SVGElement>
   label: "Chiffres d'affaires" | "À venir"
   turnover: number
-}): JSX.Element {
+}) {
   return (
     <div className="grid gap-4">
       <div className="rounded-sm p-2 text-right">
@@ -33,10 +34,11 @@ function Turnover({
 }
 
 function Turnovers() {
-  const turnovers = useSelector(
-    (store: RootState): { coming: number; current: number } =>
-      store.income.turnovers
-  )
+  const bills = useSelector((state: RootState) => state.income.bills)
+  const turnovers = {
+    current: turnoverFiltered(bills, "CASHED"),
+    coming: turnoverFiltered(bills, "NOT CASHED"),
+  }
   const [turnoverCurrent, setTurnoverCurrent] = useState(turnovers.current)
   const [turnoverComing, setTurnoverComing] = useState(turnovers.coming)
 

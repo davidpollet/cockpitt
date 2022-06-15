@@ -1,18 +1,35 @@
 import "@styles/styles.css"
+import "../public/css/nprogress.css"
 
 import type { AppProps } from "next/app"
 import { IconContext } from "react-icons"
+import NProgress from "nprogress"
 import { Provider } from "react-redux"
-import Script from "next/script"
+import Router from "next/router"
 import { SessionProvider } from "next-auth/react"
-import getStore from "@store/store"
+import store from "@store/store"
+import { useEffect } from "react"
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  const store = getStore(pageProps.initialState)
+  NProgress.configure({ showSpinner: false })
+  useEffect(() => {
+    const handleRouteStart = () => NProgress.start()
+    const handleRouteDone = () => NProgress.done()
+
+    Router.events.on("routeChangeStart", handleRouteStart)
+    Router.events.on("routeChangeComplete", handleRouteDone)
+    Router.events.on("routeChangeError", handleRouteDone)
+
+    return () => {
+      Router.events.off("routeChangeStart", handleRouteStart)
+      Router.events.off("routeChangeComplete", handleRouteDone)
+      Router.events.off("routeChangeError", handleRouteDone)
+    }
+  }, [])
   return (
     <>
-      <SessionProvider session={session}>
-        <Provider store={store}>
+      <Provider store={store}>
+        <SessionProvider session={session}>
           <IconContext.Provider
             value={{
               color: "currentColor",
@@ -20,8 +37,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           >
             <Component {...pageProps} />
           </IconContext.Provider>
-        </Provider>
-      </SessionProvider>
+        </SessionProvider>
+      </Provider>
     </>
   )
 }
