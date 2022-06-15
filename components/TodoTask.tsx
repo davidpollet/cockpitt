@@ -26,8 +26,6 @@ function Task({ task }: { task: taskProps }) {
 
   return (
     <motion.li
-      layout
-      key={task.id}
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 24, opacity: 0 }}

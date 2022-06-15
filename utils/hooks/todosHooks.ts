@@ -25,7 +25,6 @@ function useFetchProjects() {
   let projects: projectProps[] = []
 
   async function getProjects() {
-    console.log("getProjects")
     projects = await projectsApi.get(`/${user.id}`)
   }
 

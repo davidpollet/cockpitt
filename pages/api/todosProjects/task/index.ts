@@ -22,7 +22,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return
   }
 
-  console.log(task)
   const ProjectCollection = await db.collection("todosProjects")
   const projectToUpdate = await ProjectCollection.findOne(
     {
