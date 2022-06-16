@@ -138,8 +138,6 @@ function AddNewTask({ project }: { project: projectProps }) {
       isDummy: project.isDummy,
     })
 
-    console.log(task.isDummy)
-
     addNewTask(task)
     form.reset()
   }

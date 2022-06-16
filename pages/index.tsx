@@ -47,6 +47,8 @@ const MesTaches: NextPage<{ user: userProps; userData: projectProps[] }> = (
       dispatch(initProjects(projects))
       addNewProject(createNewProject("Inbox", owner))
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
