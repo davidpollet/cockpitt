@@ -41,9 +41,9 @@ function BillsFormAddNew() {
       amount,
       customer: customer.value,
       description: description.value,
+      owner: user?.id || null,
     })
 
-    bill.owner = user?.id ? user.id : "demo"
     submitNewBill(bill)
 
     setIsSubmited(true)

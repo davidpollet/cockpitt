@@ -20,7 +20,7 @@ const todosSlice = createSlice({
     },
 
     addDummiesProjects: (state) => {
-      state = dummyProjects
+      state = [...state, ...dummyProjects]
       return state
     },
 

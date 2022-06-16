@@ -7,10 +7,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   let db: any
   const project = req.body
 
-  if (project.isDummy) {
-    return res.status(200)
-  }
-
   try {
     client = await connectToDatabase()
     db = client.db()

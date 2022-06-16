@@ -5,17 +5,20 @@ interface newBillProps {
   customer: string
   amount: number
   description: string
+  owner: string | null
 }
 
 function createBill({
   customer,
   amount,
   description,
+  owner,
 }: newBillProps): billProps {
   return {
     amount,
     customer,
     description,
+    owner,
     cashedAt: null,
     cashedAtMonth: null,
     cashedAtYear: null,

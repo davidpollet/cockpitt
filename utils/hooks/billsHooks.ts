@@ -34,15 +34,15 @@ function useAddNewBill() {
 
   async function addNewBill(bill: billProps) {
     dispatch(storeAddNewBill(bill))
-    if (!bill.isDummy) {
-      try {
-        await billsApi.post("/", bill)
-      } catch {
-        showToast("Impossible d'ajouter la facture", "error")
-        dispatch(storeDeleteBill(bill))
-      } finally {
-        setIsAdding(false)
-      }
+    if (!bill.owner) return
+    setIsAdding(true)
+    try {
+      await billsApi.post("/", bill)
+    } catch {
+      showToast("Impossible d'ajouter la facture", "error")
+      dispatch(storeDeleteBill(bill))
+    } finally {
+      setIsAdding(false)
     }
   }
 
@@ -53,17 +53,14 @@ function useUpdateBill() {
   const dispatch = useDispatch()
   const bills = useSelector((state: RootState) => state.income.bills)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { user } = useUser()
 
   async function updateBill(bill: billProps) {
-    setIsUpdating(true)
     const oldBill = bills.find((b) => b.id === bill.id)
     dispatch(storeUpdateBill(bill))
 
-    if (bill.isDummy || !user.id) {
-      setIsUpdating(false)
-      return
-    }
+    if (!bill.owner) return
+
+    setIsUpdating(true)
     try {
       await billsApi.patch(`/${bill.id}`, bill)
     } catch {
@@ -98,19 +95,14 @@ function useUpdateBill() {
 function useDeleteBill() {
   const dispatch = useDispatch()
   const bills = useSelector((state: RootState) => state.income.bills)
-  const { user } = useUser()
-
   const [isDeleting, setIsDeleting] = useState(false)
 
   async function deleteBill(bill: billProps) {
     dispatch(storeDeleteBill(bill))
+
+    if (!bill.owner) return
+
     setIsDeleting(true)
-
-    if (bill.isDummy || !user.id) {
-      setIsDeleting(false)
-      return
-    }
-
     const oldBill = bills.find((b) => b.id === bill.id)
     try {
       await billsApi.delete(`/${bill.id}`, bill)

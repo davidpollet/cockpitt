@@ -10,7 +10,7 @@ export type billProps = {
   id: string
   isDummy?: boolean
   remindedAt: number[]
-  owner?: string
+  owner?: string | null
   sentAt: number | null
   updatedAt: number | null
 }

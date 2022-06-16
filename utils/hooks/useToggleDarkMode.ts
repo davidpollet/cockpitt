@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
 
 function useToggleDarkMode() {
-  const darkMode =
+  const darkMode = () =>
     typeof window !== "undefined" &&
     document.documentElement.classList.contains("dark")
-  const [isDarkMode, setIsDarkMode] = useState(darkMode)
+  const [isDarkMode, setIsDarkMode] = useState(darkMode())
+
+  useEffect(() => {
+    setIsDarkMode(darkMode())
+  }, [])
 
   useEffect(() => {
     document.head.insertAdjacentHTML(

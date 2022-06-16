@@ -133,9 +133,12 @@ function AddNewTask({ project }: { project: projectProps }) {
     const task: taskProps = createNewTask({
       title,
       project: project.name,
-      owner: user?.id || "demo",
+      owner: user?.id || null,
       projectId: project.id,
+      isDummy: project.isDummy,
     })
+
+    console.log(task.isDummy)
 
     addNewTask(task)
     form.reset()

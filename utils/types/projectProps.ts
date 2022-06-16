@@ -3,7 +3,7 @@ import { taskProps } from "./taskProps"
 type projectProps = {
   name: string
   isDummy: boolean
-  owner: string
+  owner: string | null
   tasks: taskProps[]
   id: string
   isExpanded: boolean

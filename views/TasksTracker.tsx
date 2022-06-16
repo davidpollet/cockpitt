@@ -28,19 +28,13 @@ function TasksTracker() {
   const projects = useSelector((state: RootState) => state.todos)
   const projectsSorted = sortProjects(projects)
   const inboxProject = projects.find((p) => p.name === "Inbox")
-  const { addNewProject } = useAddNewProject()
 
-  if (!isMounted()) {
+  if (!isMounted) {
     return (
       <div className="flex justify-center p-2">
         <Loading />
       </div>
     )
-  }
-
-  if (!inboxProject) {
-    const owner = user.id || "demo"
-    addNewProject(createNewProject("Inbox", owner))
   }
 
   return (
@@ -161,7 +155,7 @@ function AddNewProjectButton({ user }: { user: userProps }) {
   const { addNewProject, isAdding } = useAddNewProject()
 
   function handleCreateNewProject() {
-    const owner = user.id || "demo"
+    const owner = user.id || null
     const newProject = createNewProject(placeHolderProjectName, owner)
     addNewProject(newProject)
   }

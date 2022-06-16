@@ -39,7 +39,7 @@ function useAddNewProject() {
 
   async function addNewProject(project: projectProps) {
     dispatch(storeAddNewProject(project))
-    if (!project.isDummy) {
+    if (user.id) {
       try {
         await projectsApi.post("/", project)
       } catch {
@@ -58,17 +58,17 @@ function useUpdateProject() {
   const dispatch = useDispatch()
   const projects = useSelector((state: RootState) => state.todos)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { user } = useUser()
 
   async function updateProject(project: projectProps) {
     setIsUpdating(true)
     const oldProject = projects.find((b) => b.id === project.id)
     dispatch(storeUpdateProject(project))
 
-    if (project.isDummy || !user.id) {
+    if (!project.owner || project.isDummy) {
       setIsUpdating(false)
       return
     }
+
     try {
       await projectsApi.patch(`/${project.id}`, project)
     } catch {
@@ -107,7 +107,7 @@ function useToggleProject() {
   async function toggleProject(project: projectProps) {
     dispatch(storeUpdateProject(project))
 
-    if (project.isDummy || !user.id) return
+    if (!user.id) return
     await projectsApi.patch(`/${project.id}`, project)
   }
 
@@ -119,15 +119,13 @@ function useToggleProject() {
 function useDeleteProject() {
   const dispatch = useDispatch()
   const projects = useSelector((state: RootState) => state.todos)
-  const { user } = useUser()
-
   const [isDeleting, setIsDeleting] = useState(false)
 
   async function deleteProject(project: projectProps) {
     dispatch(storeDeleteProject(project.id))
     setIsDeleting(true)
 
-    if (project.isDummy || !user.id) {
+    if (project.isDummy || !project.owner) {
       setIsDeleting(false)
       return
     }
@@ -157,15 +155,16 @@ function useAddNewTask() {
 
   async function addNewTask(task: taskProps) {
     dispatch(storeAddNewTask(task))
-    if (!task.isDummy) {
-      try {
-        await tasksApi.post("/", task)
-      } catch {
-        showToast("Impossible d'ajouter la tâche", "error")
-        dispatch(storeDeleteTask(task))
-      } finally {
-        setIsAdding(false)
-      }
+    if (!task.owner || task.isDummy) return
+
+    setIsAdding(true)
+    try {
+      await tasksApi.post("/", task)
+    } catch {
+      showToast("Impossible d'ajouter la tâche", "error")
+      dispatch(storeDeleteTask(task))
+    } finally {
+      setIsAdding(false)
     }
   }
 
@@ -176,7 +175,6 @@ function useUpdateTask() {
   const dispatch = useDispatch()
   const projects = useSelector((state: RootState) => state.todos)
   const [isUpdating, setIsUpdating] = useState(false)
-  const { user } = useUser()
 
   async function updateTask(task: taskProps) {
     setIsUpdating(true)
@@ -184,10 +182,11 @@ function useUpdateTask() {
     const oldTask = oldProject?.tasks.find((t) => t.id === task.id)
     dispatch(storeUpdateTask(task))
 
-    if (task.isDummy || !user.id) {
+    if (!task.owner || task.isDummy) {
       setIsUpdating(false)
       return
     }
+
     try {
       await tasksApi.patch(`/${task.projectId}`, task)
     } catch {
@@ -221,7 +220,6 @@ function useUpdateTask() {
 
 function useDeleteTask() {
   const dispatch = useDispatch()
-  const { user } = useUser()
 
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -229,7 +227,7 @@ function useDeleteTask() {
     dispatch(storeDeleteTask(task))
     setIsDeleting(true)
 
-    if (task.isDummy || !user.id) {
+    if (!task.owner || task.isDummy) {
       setIsDeleting(false)
       return
     }

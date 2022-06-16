@@ -7,7 +7,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   let db: any
   const task = req.body
 
-  if (task.isDummy) {
+  if (task.owner === "demo") {
     return res.status(200)
   }
 

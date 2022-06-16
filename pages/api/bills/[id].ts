@@ -8,10 +8,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query
   const { method } = req
 
-  if (id.includes("demo")) {
-    return res.status(200)
-  }
-
   try {
     client = await connectToDatabase()
     db = client.db()

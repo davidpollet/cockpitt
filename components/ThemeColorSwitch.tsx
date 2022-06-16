@@ -5,16 +5,18 @@ import useToggleDarkMode from "@hooks/useToggleDarkMode"
 
 function ThemeColorSwitch() {
   const { isDarkMode, setIsDarkMode } = useToggleDarkMode()
-  const isMounted = useIsMounted()
+  const { isMounted } = useIsMounted()
 
-  if (!isMounted()) return null
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <button
       type="button"
       onClick={() => setIsDarkMode(!isDarkMode)}
       className={`
-      ${!isMounted() ? "opacity-0" : null}
+      ${!isMounted && "opacity-0"}
       button overflow-hidden text-2xl outline-none ring-gray-50 focus:-translate-y-1 focus:bg-white/40`}
       aria-hidden
     >

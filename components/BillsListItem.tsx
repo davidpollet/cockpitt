@@ -177,7 +177,7 @@ function EditableBox({
     <span
       className={editableBoxClassName}
       id="customer-editable"
-      contentEditable={!bill.sentAt}
+      contentEditable={!bill.sentAt || property === "description"}
       suppressContentEditableWarning={true}
       onBlur={updateItem}
       ref={boxRef}

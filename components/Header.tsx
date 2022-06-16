@@ -1,5 +1,5 @@
+import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from "react"
 
 import Cookies from "js-cookie"
 import { EmojiHandHi } from "./IconsEmoji.index"
@@ -9,6 +9,7 @@ import UserMenu from "./UserMenu"
 import { cockpittPages } from "./Navbar"
 import { openAuthModal } from "@store/features/authModalSlice"
 import time from "@helpers/dateHelpers"
+import useIsMounted from "@hooks/useIsMounted"
 import { useRouter } from "next/router"
 import { userProps } from "@localTypes/userProps"
 
@@ -32,32 +33,40 @@ font-bold leading-none text-white`
 function HeaderTitle({ user }: { user: userProps | undefined }) {
   const router = useRouter()
   const currentPage = cockpittPages.find((c) => c.path === router.pathname)
-  const cookieShowHello = Cookies.get("showHello")
-  const showHelloCondition = user?.id && !cookieShowHello
-  const [showHello] = useState(showHelloCondition)
-  const [isLoading, setisLoading] = useState(true)
+  const cookieSayHello = !Cookies.get("sayHello")
+  const sayHelloCondition = useCallback(
+    () => user?.id && cookieSayHello,
+    [user, cookieSayHello]
+  )
+  const [sayHello, setSayHello] = useState(sayHelloCondition())
+  const isMounted = useIsMounted()
 
   useEffect(() => {
-    let timeOut: ReturnType<typeof setTimeout>
-    if (showHello) {
+    let timeout: ReturnType<typeof setTimeout>
+
+    if (user) {
+      setSayHello(sayHelloCondition())
       const remainingHoursToday = 24 - time().hour()
-      timeOut = setTimeout(() => {
-        Cookies.set("showHello", "false", {
+      timeout = setTimeout(() => {
+        Cookies.set("sayHello", "false", {
           expires: remainingHoursToday / 24,
           sameSite: "strict",
         })
+        setSayHello(false)
       }, 1500)
     }
-    return () => clearTimeout(timeOut)
-  }, [user, showHello])
 
-  useEffect(() => setisLoading(false), [])
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [user, sayHelloCondition])
+
   return (
     <div className="relative w-full self-center">
       <h1
         className={`
           transition-all
-          ${!isLoading && showHello ? "opacity-0" : "opacity-100"}
+          ${isMounted && sayHello && "opacity-0"}
           ${headerTitleClassName}`}
       >
         <span className="relative z-10 text-xl sm:text-2xl xl:text-3xl">
@@ -70,36 +79,42 @@ function HeaderTitle({ user }: { user: userProps | undefined }) {
           {currentPage?.name}
         </span>
       </h1>
-      {user?.name && (
-        <p
-          className={`
-        top-2/2 absolute left-0 flex grow translate-y-0 items-center font-bold leading-none
-        text-white opacity-0 transition-all
-        ${
-          !isLoading && showHello
-            ? "!top-1/2 !-translate-y-1/2 !opacity-100"
-            : ""
-        }`}
-        >
-          {
-            <EmojiHandHi
-              className={`origin-bottom -rotate-12 text-4xl xl:text-5xl ${
-                !isLoading && showHello ? "animate-shake" : ""
-              }`}
-            />
-          }
-          <span className="relative z-10 text-xl sm:text-2xl xl:text-3xl">
-            Bonjour {user.name.split(" ")[0]}
-          </span>
-          <span
-            className="absolute whitespace-nowrap text-2xl uppercase opacity-10 sm:text-4xl xl:text-5xl"
-            aria-hidden
-          >
-            Bonjour {user.name.split(" ")[0]}
-          </span>
-        </p>
-      )}
+      {sayHello && <SayHello user={user} sayHello={sayHello} />}
     </div>
+  )
+}
+
+function SayHello({
+  user,
+  sayHello,
+}: {
+  user: userProps | undefined
+  sayHello: boolean
+}) {
+  return (
+    <p
+      className={`
+      absolute top-1/2 left-0 flex grow items-center font-bold leading-none
+      ${sayHello ? "-translate-y-1/2" : "translate-y-2/2"}
+      text-white transition-all`}
+    >
+      {
+        <EmojiHandHi
+          className={`${
+            sayHello ? "animate-shake" : ""
+          } origin-bottom -rotate-12 text-4xl xl:text-5xl`}
+        />
+      }
+      <span className="relative z-10 text-xl sm:text-2xl xl:text-3xl">
+        Bonjour {user?.name.split(" ")[0]}
+      </span>
+      <span
+        className="absolute whitespace-nowrap text-2xl uppercase opacity-10 sm:text-4xl xl:text-5xl"
+        aria-hidden
+      >
+        Bonjour {user?.name.split(" ")[0]}
+      </span>
+    </p>
   )
 }
 

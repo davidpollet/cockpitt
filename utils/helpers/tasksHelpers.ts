@@ -23,7 +23,8 @@ type taskSubmited = {
   isImportant?: boolean
   isUrgent?: boolean
   project: string | "Inbox"
-  owner?: string
+  owner?: string | null
+  isDummy: boolean
 }
 
 function createNewTask(taskSubmited: taskSubmited): taskProps {
@@ -46,14 +47,17 @@ function createNewTask(taskSubmited: taskSubmited): taskProps {
   }
 }
 
-function createNewProject(projectName: string, owner = "demo"): projectProps {
+function createNewProject(
+  projectName: string,
+  owner: string | null
+): projectProps {
   return {
     id: nanoid(),
     name: projectName,
     tasks: [],
     isDummy: false,
     isExpanded: true,
-    owner,
+    owner: owner || null,
   }
 }
 
