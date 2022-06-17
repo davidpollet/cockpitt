@@ -23,6 +23,10 @@ const Incomes: NextPage<{ user: userProps; userData: billProps[] }> = (
     <>
       <Head>
         <title>Suivi du Chiffre d'affaires - Cockpitt</title>
+        <meta
+          name="description"
+          content="Suivez les factures à venir, celles qui ont été envoyées ou encaissé et voyez l'évolution de votre chiffre d'affaires"
+        />
       </Head>
       <AppWrapper>
         <IncomesTracker />

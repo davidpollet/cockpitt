@@ -43,7 +43,7 @@ function BillsListItem({ bill }: { bill: billProps }) {
 
   return (
     <motion.li
-      layout
+      layout="position"
       role="row"
       className={BillListItemTwClass}
       initial={{ y: -24, opacity: 0 }}

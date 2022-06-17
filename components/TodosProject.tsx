@@ -34,36 +34,21 @@ import wait from "@helpers/wait"
 function TasksProject({ project }: { project: projectProps }) {
   const sortedTask = useMemo(() => sortTasks(project.tasks), [project.tasks])
   const [askDeleteConfirmation, setAskDeleteConfirmation] = useState(false)
-  const { toggleProject } = useToggleProject()
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
-
-  function handleToggleProject() {
-    const isExpanded = !project.isExpanded
-    const newProject = { ...project, isExpanded }
-    toggleProject(newProject)
-  }
 
   return (
     <motion.section
       initial={{ y: 24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.2 }}
-      className="project-wrapper target:scroll-padding-y-6 relative grid gap-1 rounded-md border-2 border-violet-50 px-2 pt-1 pb-2 target:border-violet-200 target:shadow-xl dark:border-violet-600/0 dark:bg-violet-800 dark:target:border-violet-100"
+      className={`project-wrapper target:scroll-padding-y-6 relative grid gap-1 rounded-md border-2 border-violet-50 px-2 transition-[padding] target:border-violet-200 target:shadow-xl dark:border-violet-600/0 dark:bg-violet-800 dark:target:border-violet-100
+      ${askDeleteConfirmation && !project.isExpanded ? "py-6" : "pt-1 pb-2"}`}
       tabIndex={-1}
       id={project.name === "Inbox" ? "inbox" : project.id} // eslint-disable-line
       data-projectid={project.name === "Inbox" ? "inbox" : project.id} // eslint-disable-line
     >
       <div className="flex items-center">
-        <button
-          className={`button is-ghost p-1 text-violet-500 dark:text-violet-100`}
-        >
-          <IconChevronDown
-            className={`translate-y-[2px] transition ${
-              project.isExpanded ? null : "-rotate-90"
-            }`}
-            onClick={handleToggleProject}
-          />
-        </button>
+        <ToggleProjectButton project={project} />
         <ProjectTitle project={project} />
         <button
           ref={deleteButtonRef}
@@ -300,4 +285,26 @@ function ProjectDeleteDialog({
   )
 }
 
+function ToggleProjectButton({ project }: { project: projectProps }) {
+  const { toggleProject } = useToggleProject()
+
+  function handleToggleProject() {
+    const isExpanded = !project.isExpanded
+    const newProject = { ...project, isExpanded }
+    toggleProject(newProject)
+  }
+  return (
+    <button
+      className={`button is-ghost p-2 text-violet-500 dark:text-violet-100`}
+      aria-label={`${project.isExpanded ? "Réduire" : "Agrandir"} le projet`}
+    >
+      <IconChevronDown
+        className={`translate-y-[2px] transition ${
+          project.isExpanded ? null : "-rotate-90"
+        }`}
+        onClick={handleToggleProject}
+      />
+    </button>
+  )
+}
 export default TasksProject

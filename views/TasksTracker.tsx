@@ -194,7 +194,7 @@ function RemoveDummyProjectsBox({ projects }: { projects: projectProps[] }) {
         className={testDemoButtonTwClass}
         onClick={() => dispatch(removeDummyProjects(projects))}
       >
-        Retirer les factures fictives
+        Retirer les projets fictifs
       </button>
     </div>
   )

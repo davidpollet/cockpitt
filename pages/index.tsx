@@ -1,8 +1,10 @@
 import { MouseEvent, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 import AppWrapper from "@components/AppWrapper"
 import Head from "next/head"
 import type { NextPage } from "next"
+import { RootState } from "@store/store"
 import TasksTracker from "views/TasksTracker"
 import { createNewProject } from "@helpers/tasksHelpers"
 import getSsrUserData from "utils/getSsrUserData"
@@ -10,7 +12,6 @@ import { initProjects } from "@store/features/todosSlice"
 import projectProps from "@localTypes/projectProps"
 import { setUserData } from "@store/features/userSlice"
 import { useAddNewProject } from "@hooks/todosHooks"
-import { useDispatch } from "react-redux"
 import { userProps } from "@localTypes/userProps"
 
 function clickOutsideTargetProject(event: MouseEvent<HTMLElement>) {
@@ -27,25 +28,27 @@ function clickOutsideTargetProject(event: MouseEvent<HTMLElement>) {
   }
 }
 
-const MesTaches: NextPage<{ user: userProps; userData: projectProps[] }> = (
-  props
-) => {
+const MesTaches: NextPage<{ user: userProps; userData: projectProps[] }> = ({
+  user,
+  userData: projects = [],
+}) => {
   const dispatch = useDispatch()
   const { addNewProject } = useAddNewProject()
+  const projectsFromStore = useSelector((state: RootState) => state.todos)
 
   useEffect(() => {
-    const projects = props.userData || []
+    if (user) dispatch(setUserData(user))
 
-    if (props.user) {
-      dispatch(setUserData(props.user))
-    }
+    if (projectsFromStore.length > 0) return
 
     if (projects.length > 0) {
       dispatch(initProjects(projects))
     } else {
-      const owner = props.user?.id || null
-      dispatch(initProjects(projects))
-      addNewProject(createNewProject("Inbox", owner))
+      const owner = user?.id || null
+      if (projectsFromStore.length === 0) {
+        dispatch(initProjects(projects))
+        addNewProject(createNewProject("Inbox", owner))
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,7 +57,11 @@ const MesTaches: NextPage<{ user: userProps; userData: projectProps[] }> = (
   return (
     <>
       <Head>
-        <title>Suivi du Chiffre d'affaires - Cockpitt</title>
+        <title>Mes tâches - Cockpitt</title>
+        <meta
+          name="description"
+          content="Suivez vos tâches par projet et sur une seule page"
+        />
       </Head>
 
       <AppWrapper onClick={clickOutsideTargetProject}>
