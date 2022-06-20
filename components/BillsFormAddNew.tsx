@@ -7,7 +7,6 @@ import createBill from "@helpers/createBill"
 import isValidNumber from "@helpers/isValidNumber"
 import showToast from "@helpers/showToast"
 import { useAddNewBill } from "@hooks/billsHooks"
-import { useWindowWidth } from "@react-hook/window-size"
 
 const inputStyles = classNames([`input-text grow lg:min-w-0`])
 
@@ -17,9 +16,6 @@ const buttonSubmitClassName = classNames([
 ])
 
 function BillsFormAddNew() {
-  const windowWidth = useWindowWidth()
-
-  const [isSmallScreen, setIsSmallScreen] = useState(true)
   const [formIsHidden, setFormIsHidden] = useState(true)
   const [isSubmited, setIsSubmited] = useState(false)
   const firstInputRef = useRef<HTMLInputElement>(null)
@@ -60,11 +56,6 @@ function BillsFormAddNew() {
   }, [formIsHidden])
 
   useEffect(() => {
-    setIsSmallScreen(windowWidth < 1024)
-    setFormIsHidden(windowWidth < 1024)
-  }, [windowWidth])
-
-  useEffect(() => {
     const submitedFeedback = setTimeout(() => {
       setIsSubmited(false)
     }, 1000)
@@ -75,7 +66,7 @@ function BillsFormAddNew() {
     <div className="flex flex-col p-2" role="row">
       <button
         className={`
-        ${isSmallScreen && !formIsHidden && "hidden"}
+        ${formIsHidden ? "" : "hidden"}
         button is-filled mx-auto gap-1 dark:text-white lg:hidden`}
         onClick={() => setFormIsHidden(false)}
       >
@@ -84,8 +75,9 @@ function BillsFormAddNew() {
       </button>
       <form
         className={`
-        ${isSmallScreen && formIsHidden && "hidden"}
-        xl:grid-cols-bills grid gap-2 lg:grid-cols-[25ch_15ch_1fr_4em]`}
+        ${formIsHidden ? "" : "!grid"}
+        xl:grid-cols-bills grid
+        gap-2 <lg:hidden lg:grid-cols-[25ch_15ch_1fr_4em]`}
         onSubmit={handleSubmit}
       >
         <button
