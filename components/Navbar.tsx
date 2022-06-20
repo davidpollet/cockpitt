@@ -42,7 +42,8 @@ function Navbar() {
   }, [windowWidth])
 
   useEffect(() => {
-    function handleRouteChange() {
+    function handleRouteChange(url: string) {
+      if (url === router.asPath) return
       navbarRef.current.classList.add("route-is-changing")
     }
 
@@ -51,7 +52,7 @@ function Navbar() {
     return () => {
       router.events.off("routeChangeStart", handleRouteChange)
     }
-  }, [router.query.slug, router.events])
+  }, [router.query.slug, router.asPath, router.events])
 
   return (
     <nav
