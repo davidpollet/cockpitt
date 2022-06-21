@@ -38,6 +38,9 @@ module.exports = {
       }
     },
     extend: {
+      gridTemplateColumns: {
+        'main-layout': '1fr minmax(auto, 20ch)'
+      },
       animation: {
         spin: 'spin 600ms linear infinite',
         loading: 'loading 1200ms ease-in-out infinite',

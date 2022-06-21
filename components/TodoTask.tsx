@@ -1,12 +1,4 @@
 import {
-  Dispatch,
-  SetStateAction,
-  memo,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
-import {
   IconCheck,
   IconPlay,
   IconRefresh,
@@ -14,35 +6,40 @@ import {
   IconThumbsUp,
   IconTrashOutline,
 } from "./Icons.index"
+import { memo, useState } from "react"
 import { useDeleteTask, useUpdateTask } from "@hooks/todosHooks"
 
-import Loading from "./Loading"
+import ItemDeleteDialog from "./ItemDeleteDialog"
 import { motion } from "framer-motion"
 import { taskProps } from "@localTypes/taskProps"
-import wait from "@helpers/wait"
 
 function Task({ task }: { task: taskProps }) {
-  const [askDeleteConfirmation, setAskDeleteConfirmation] = useState(false)
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+  const { deleteTask, isDeleting } = useDeleteTask()
 
   return (
     <motion.li
+      layout="position"
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 24, opacity: 0 }}
       transition={{ duration: 0.2 }}
       className={`relative flex gap-2 rounded-md bg-white px-2 transition-[padding] dark:bg-white/10 dark:text-violet-100 <sm:flex-col ${
-        askDeleteConfirmation ? "<md:py-9 md:py-6" : "py-2"
+        showDeleteConfirmation ? "<md:py-9 md:py-6" : "py-2"
       }`}
     >
       <h3 className="sm:flex-grow">{task.title}</h3>
       <div className="flex">
         <TaskStatus task={task} />
-        <TaskDelete onClick={() => setAskDeleteConfirmation(true)} />
+        <TaskDelete onClick={() => setShowDeleteConfirmation(true)} />
       </div>
-      <TaskDeleteDialog
-        taskToDelete={task}
-        setAskDeleteConfirmation={setAskDeleteConfirmation}
-        show={askDeleteConfirmation}
+      <ItemDeleteDialog
+        question="Supprimer cette tâche ?"
+        itemToDelete={task}
+        dialogIsVisible={showDeleteConfirmation}
+        setDialogIsVisible={setShowDeleteConfirmation}
+        deleteFn={deleteTask}
+        isDeleting={isDeleting}
       />
     </motion.li>
   )
@@ -57,70 +54,6 @@ function TaskDelete({ onClick }: { onClick: () => void }) {
     >
       <IconTrashOutline />
     </button>
-  )
-}
-
-interface taskDeleteDialogProps {
-  taskToDelete: taskProps
-  show: boolean
-  setAskDeleteConfirmation: Dispatch<SetStateAction<boolean>>
-}
-
-function TaskDeleteDialog({
-  // eslint-disable-next-line no-unused-vars
-  taskToDelete,
-  show,
-  setAskDeleteConfirmation,
-}: taskDeleteDialogProps) {
-  const deleteBoxRef = useRef<HTMLDivElement>(null)
-  const { deleteTask, isDeleting } = useDeleteTask()
-  useEffect(() => {
-    async function toggleDeleteBox() {
-      if (show) {
-        await wait(10)
-        deleteBoxRef?.current?.classList.remove("hidden")
-      }
-      if (!show) {
-        deleteBoxRef?.current?.classList.add("hidding")
-        await wait(1000)
-        deleteBoxRef?.current?.classList.add("hidden")
-        deleteBoxRef?.current?.classList.remove("hidding")
-      }
-    }
-    toggleDeleteBox()
-    return () => {}
-  }, [show])
-
-  const deleteBoxClassName = `bill-delete-dialog absolute inset-2 z-10
-  flex flex-wrap items-center justify-center gap-2 rounded-md
-  bg-violet-500 p-1 drop-shadow-md transition-all duration-300
-  dark:bg-violet-850 hidden`
-
-  return (
-    <div className={deleteBoxClassName} ref={deleteBoxRef}>
-      <h4 className="text-md font-semibold text-white">Supprimer la tâche ?</h4>
-      <div>
-        <button
-          className="button is-ghost mr-1 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white dark:from-violet-400 dark:to-violet-400"
-          onClick={() => setAskDeleteConfirmation(false)}
-        >
-          Annuler
-        </button>
-        <button
-          onClick={() => deleteTask(taskToDelete)}
-          className="button is-filled relative bg-white bg-w-0/h-0 bg-center text-violet-500 dark:bg-violet-600 dark:text-violet-100"
-        >
-          <Loading
-            size={20}
-            className={`absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 transition-all
-            ${isDeleting ? "scale-1" : "scale-0"}`}
-          />
-          <span className={`${isDeleting && "opacity-0 transition-all "}`}>
-            Supprimer
-          </span>
-        </button>
-      </div>
-    </div>
   )
 }
 

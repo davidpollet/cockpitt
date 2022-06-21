@@ -1,11 +1,8 @@
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion"
 import {
-  Dispatch,
   FocusEvent,
   FormEvent,
   KeyboardEvent,
-  SetStateAction,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -23,6 +20,7 @@ import {
   useUpdateProject,
 } from "@hooks/todosHooks"
 
+import ItemDeleteDialog from "./ItemDeleteDialog"
 import Loading from "./Loading"
 import Task from "./TodoTask"
 import projectProps from "@localTypes/projectProps"
@@ -33,8 +31,9 @@ import wait from "@helpers/wait"
 
 function TasksProject({ project }: { project: projectProps }) {
   const sortedTask = useMemo(() => sortTasks(project.tasks), [project.tasks])
-  const [askDeleteConfirmation, setAskDeleteConfirmation] = useState(false)
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const deleteButtonRef = useRef<HTMLButtonElement>(null)
+  const { deleteProject, isDeleting } = useDeleteProject()
 
   return (
     <motion.section
@@ -42,7 +41,7 @@ function TasksProject({ project }: { project: projectProps }) {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.2 }}
       className={`project-wrapper target:scroll-padding-y-6 relative grid gap-1 rounded-md border-2 border-violet-50 px-2 transition-[padding] target:border-violet-200 target:shadow-xl dark:border-violet-600/0 dark:bg-violet-800 dark:target:border-violet-100
-      ${askDeleteConfirmation && !project.isExpanded ? "py-6" : "pt-1 pb-2"}`}
+      ${showDeleteConfirmation && !project.isExpanded ? "py-6" : "pt-1 pb-2"}`}
       tabIndex={-1}
       id={project.name === "Inbox" ? "inbox" : project.id} // eslint-disable-line
       data-projectid={project.name === "Inbox" ? "inbox" : project.id} // eslint-disable-line
@@ -53,7 +52,7 @@ function TasksProject({ project }: { project: projectProps }) {
         <button
           ref={deleteButtonRef}
           onClick={() => {
-            setAskDeleteConfirmation(true)
+            setShowDeleteConfirmation(true)
           }}
           id={`delete-project-${project.id}`}
           className="button is-ghost ml-auto p-2 text-xl text-violet-500 dark:text-violet-100"
@@ -75,15 +74,16 @@ function TasksProject({ project }: { project: projectProps }) {
               open: { opacity: 1, height: "auto" },
               collapsed: { opacity: 0, height: 0 },
             }}
+            transition={{ ease: [0.04, 0.62, 0.23, 0.98] }}
           >
             <AddNewTask project={project} />
             {sortedTask.length > 0 ? (
               <ul className="grid gap-[2px]">
-                <AnimatePresence>
+                <LayoutGroup id={project.id}>
                   {sortedTask.map((task) => (
                     <Task key={task.id} task={task} />
                   ))}
-                </AnimatePresence>
+                </LayoutGroup>
               </ul>
             ) : (
               <p className="flex items-center gap-1 p-2 text-violet-500 dark:text-violet-100">
@@ -94,10 +94,13 @@ function TasksProject({ project }: { project: projectProps }) {
           </motion.div>
         )}
       </AnimatePresence>
-      <ProjectDeleteDialog
-        projectToDelete={project}
-        setAskDeleteConfirmation={setAskDeleteConfirmation}
-        show={askDeleteConfirmation}
+      <ItemDeleteDialog
+        question={`Supprimer le projet ${project.name} ?`}
+        itemToDelete={project}
+        dialogIsVisible={showDeleteConfirmation}
+        setDialogIsVisible={setShowDeleteConfirmation}
+        deleteFn={deleteProject}
+        isDeleting={isDeleting}
       />
     </motion.section>
   )
@@ -216,72 +219,6 @@ function ProjectTitle({ project }: { project: projectProps }) {
         {project.name}
       </span>
     </h2>
-  )
-}
-
-interface taskDeleteDialogProps {
-  projectToDelete: projectProps
-  show: boolean
-  setAskDeleteConfirmation: Dispatch<SetStateAction<boolean>>
-}
-
-function ProjectDeleteDialog({
-  // eslint-disable-next-line no-unused-vars
-  projectToDelete,
-  show,
-  setAskDeleteConfirmation,
-}: taskDeleteDialogProps) {
-  const deleteBoxRef = useRef<HTMLDivElement>(null)
-  const { deleteProject, isDeleting } = useDeleteProject()
-  useEffect(() => {
-    async function toggleDeleteBox() {
-      if (show) {
-        await wait(10)
-        deleteBoxRef?.current?.classList.remove("hidden")
-      }
-      if (!show) {
-        deleteBoxRef?.current?.classList.add("hidding")
-        await wait(1000)
-        deleteBoxRef?.current?.classList.add("hidden")
-        deleteBoxRef?.current?.classList.remove("hidding")
-      }
-    }
-    toggleDeleteBox()
-    return () => {}
-  }, [show])
-
-  const deleteBoxClassName = `bill-delete-dialog absolute inset-2 z-10
-  flex flex-wrap items-center justify-center gap-2 rounded-md
-  bg-violet-500 p-1 drop-shadow-md transition-all duration-300
-  dark:bg-violet-850 hidden`
-
-  return (
-    <div className={deleteBoxClassName} ref={deleteBoxRef}>
-      <h4 className="text-md font-semibold text-white">
-        Supprimer le project {projectToDelete.name} ?
-      </h4>
-      <div>
-        <button
-          className="button is-ghost mr-1 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white dark:from-violet-400 dark:to-violet-400"
-          onClick={() => setAskDeleteConfirmation(false)}
-        >
-          Annuler
-        </button>
-        <button
-          onClick={() => deleteProject(projectToDelete)}
-          className="button is-filled relative bg-white bg-w-0/h-0 bg-center text-violet-500 dark:bg-violet-600 dark:text-violet-100"
-        >
-          <Loading
-            size={20}
-            className={`absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 transition-all
-            ${isDeleting ? "scale-1" : "scale-0"}`}
-          />
-          <span className={`${isDeleting && "opacity-0 transition-all "}`}>
-            Supprimer
-          </span>
-        </button>
-      </div>
-    </div>
   )
 }
 

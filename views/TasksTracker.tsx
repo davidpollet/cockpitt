@@ -1,4 +1,3 @@
-import { LayoutGroup, motion } from "framer-motion"
 import {
   addDummiesProjects,
   removeDummyProjects,
@@ -15,6 +14,7 @@ import Loading from "@components/Loading"
 import { MouseEvent } from "react"
 import { RootState } from "@store/store"
 import TasksProject from "@components/TodosProject"
+import { motion } from "framer-motion"
 import projectProps from "@localTypes/projectProps"
 import { testDemoButtonTwClass } from "@components/BillsList"
 import { useAddNewProject } from "@hooks/todosHooks"
@@ -38,7 +38,7 @@ function TasksTracker() {
   }
 
   return (
-    <div className="grid gap-2 lg:grid-cols-[1fr_auto] xl:gap-4">
+    <div className="grid gap-2 lg:grid-cols-main-layout xl:gap-4">
       {projectsSorted.length > 0 && <ProjectsNav projects={projectsSorted} />}
       <div className="grid gap-4">
         {inboxProject && (
@@ -59,14 +59,14 @@ function TasksTracker() {
             })}
           </div>
         </div>
-        {!projects.some((p) => p.name !== "Inbox") && <DemoBox />}
+        {!projects.some((p) => p.name !== "Inbox") && <TestDemoWrapper />}
       </div>
     </div>
   )
 }
 
 function ProjectsNav({ projects }: { projects: projectProps[] }) {
-  const navItemClass = `button is-ghost py-1 dark:text-violet-100 whitespace-nowrap <lg:px-2`
+  const navItemClass = `button is-ghost py-1 dark:text-violet-100 <lg:whitespace-nowrap <lg:px-2`
 
   function handleNavProjectClick(event: MouseEvent<HTMLAnchorElement>) {
     event.preventDefault()
@@ -85,33 +85,32 @@ function ProjectsNav({ projects }: { projects: projectProps[] }) {
   }
   return (
     <nav className="grid items-start lg:order-1">
-      <LayoutGroup>
-        <motion.div
-          className="sticky top-1 flex max-h-[95vh] gap-1 overflow-auto rounded-md  p-1 ring-1 ring-inset ring-violet-500 dark:ring-0 lg:flex-col"
-          style={{ scrollbarWidth: "none", overscrollBehavior: "contain" }}
-        >
-          <a href="#inbox" className={navItemClass}>
-            Inbox
-          </a>
-          {projects.map(
-            (project) =>
-              project.name !== "Inbox" && (
-                <motion.a
-                  initial={{ y: 24, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 24, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className={navItemClass}
-                  key={"link-" + project.id}
-                  href={`#${project.id}`}
-                  onClick={handleNavProjectClick}
-                >
-                  {project.name}
-                </motion.a>
-              )
-          )}
-        </motion.div>
-      </LayoutGroup>
+      <div
+        className="sticky top-1 flex max-h-[95vh] gap-1 overflow-auto rounded-md  p-1 ring-1 ring-inset ring-violet-500 dark:ring-0 lg:flex-col"
+        style={{ scrollbarWidth: "none", overscrollBehavior: "contain" }}
+      >
+        <a href="#inbox" className={navItemClass}>
+          Inbox
+        </a>
+        {projects.map(
+          (project) =>
+            project.name !== "Inbox" && (
+              <motion.a
+                layout="position"
+                initial={{ y: 24, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 24, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className={navItemClass}
+                key={"link-" + project.id}
+                href={`#${project.id}`}
+                onClick={handleNavProjectClick}
+              >
+                {project.name}
+              </motion.a>
+            )
+        )}
+      </div>
     </nav>
   )
 }
@@ -130,7 +129,7 @@ function MyProjectsTitle({ title }: { title: string }) {
   )
 }
 
-function DemoBox() {
+function TestDemoWrapper() {
   const dispatch = useDispatch()
 
   return (
