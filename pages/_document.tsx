@@ -39,7 +39,7 @@ export default function Document() {
         <meta property="og:description" content="" />
         <meta
           property="og:image"
-          content="https://cockpitt.vercel.app/img/og.jpg"
+          content="https://cockpitt.vercel.app/img/og-stack.jpg"
         />
 
         <meta property="twitter:card" content="summary_large_image" />
@@ -51,7 +51,7 @@ export default function Document() {
         <meta property="twitter:description" content="" />
         <meta
           property="twitter:image"
-          content="https://cockpitt.vercel.app/img/og.jpg"
+          content="https://cockpitt.vercel.app/img/og-stack.jpg"
         />
       </Head>
       <body>
