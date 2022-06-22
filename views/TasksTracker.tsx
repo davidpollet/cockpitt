@@ -1,3 +1,4 @@
+import { LayoutGroup, motion } from "framer-motion"
 import {
   addDummiesProjects,
   removeDummyProjects,
@@ -14,7 +15,6 @@ import Loading from "@components/Loading"
 import { MouseEvent } from "react"
 import { RootState } from "@store/store"
 import TasksProject from "@components/TodosProject"
-import { motion } from "framer-motion"
 import projectProps from "@localTypes/projectProps"
 import { testDemoButtonTwClass } from "@components/BillsList"
 import { useAddNewProject } from "@hooks/todosHooks"
@@ -84,7 +84,7 @@ function ProjectsNav({ projects }: { projects: projectProps[] }) {
     }
   }
   return (
-    <nav className="grid items-start lg:order-1">
+    <nav className="z-20 grid items-start rounded-md bg-violet-25 dark:bg-violet-850 <lg:sticky <lg:top-1 lg:order-1">
       <div
         className="sticky top-1 flex max-h-[95vh] gap-1 overflow-auto rounded-md  p-1 ring-1 ring-inset ring-violet-500 dark:ring-0 lg:flex-col"
         style={{ scrollbarWidth: "none", overscrollBehavior: "contain" }}
@@ -92,24 +92,26 @@ function ProjectsNav({ projects }: { projects: projectProps[] }) {
         <a href="#inbox" className={navItemClass}>
           Inbox
         </a>
-        {projects.map(
-          (project) =>
-            project.name !== "Inbox" && (
-              <motion.a
-                layout="position"
-                initial={{ y: 24, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 24, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className={navItemClass}
-                key={"link-" + project.id}
-                href={`#${project.id}`}
-                onClick={handleNavProjectClick}
-              >
-                {project.name}
-              </motion.a>
-            )
-        )}
+        <LayoutGroup id="nav">
+          {projects.map(
+            (project) =>
+              project.name !== "Inbox" && (
+                <motion.a
+                  layout="position"
+                  initial={{ y: 24, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 24, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={navItemClass}
+                  key={"link-" + project.id}
+                  href={`#${project.id}`}
+                  onClick={handleNavProjectClick}
+                >
+                  {project.name}
+                </motion.a>
+              )
+          )}
+        </LayoutGroup>
       </div>
     </nav>
   )
