@@ -57,7 +57,7 @@ function Navbar() {
   return (
     <nav
       ref={navbarRef}
-      className={`fixed bottom-0 right-0 left-0 z-10 mx-auto flex w-fit items-end justify-center gap-2 rounded-t-md bg-violet-25 px-2 pt-2 shadow-lg shadow-violet-200 dark:bg-violet-850 dark:shadow-none`}
+      className={`fixed bottom-0 right-0 left-0 z-20 mx-auto flex w-fit items-end justify-center gap-2 rounded-t-md bg-violet-25 px-2 pt-2 shadow-lg shadow-violet-200 dark:bg-violet-850 dark:shadow-none`}
     >
       {cockpittPages.map((page) => (
         <NavLink

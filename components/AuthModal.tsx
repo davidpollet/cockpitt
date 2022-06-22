@@ -24,7 +24,7 @@ function AuthModal() {
     <Dialog
       open={true}
       onClose={() => dispatch(closeAuthModal())}
-      className="fixed inset-0 z-10 grid min-h-screen p-2"
+      className="fixed inset-0 z-50 grid min-h-screen p-2"
     >
       <DialogOverlay />
 
