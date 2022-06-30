@@ -14,7 +14,7 @@
 
     @media screen and (min-width: theme("screens.xl")) {
       grid-template-areas: none;
-      grid-template-columns: 15% 12ch 30% 1fr 4em;
+      grid-template-columns: 20ch 12ch 30% 1fr auto;
 
       > [class*="col-bills-"] {
         grid-area: auto;
