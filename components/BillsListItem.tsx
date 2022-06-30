@@ -172,6 +172,16 @@ function EditableBox({
     }
   }
 
+  function showNonEditableBoxAlert(event: MouseEvent) {
+    const boxTarget = event.target as HTMLSpanElement
+    if (boxTarget.contentEditable === "false") {
+      showToast(
+        "La facture n'est plus éditable depuis qu'elle a été envoyée",
+        ""
+      )
+    }
+  }
+
   const editableBoxClassName = `block relative rounded-sm px-1 py-1 outline-none
   transition-all duration-100 ease-in focus:ring-2
   focus:ring-violet-300 focus-visible:shadow-lg lg:flex-grow
@@ -185,6 +195,7 @@ function EditableBox({
       suppressContentEditableWarning={true}
       onBlur={updateItem}
       ref={boxRef}
+      onClick={showNonEditableBoxAlert}
       onFocus={removeDescriptionPlaceholder}
     >
       <Loading
