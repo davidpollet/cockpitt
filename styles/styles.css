@@ -5,6 +5,7 @@
 @import "./components/project-wrapper.css";
 @import "./components/input.css";
 @import "./components/nav-link.css";
+@import "./pages-templates/homepage-landing.css";
 
 @tailwind base;
 @tailwind components;
@@ -15,6 +16,10 @@
     scroll-behavior: smooth;
     scroll-padding-top: var(--scroll-padding-top, 2em);
   } */
+  :root {
+    /* For hsl(198deg 93% 60% / <alpha-value>) */
+    --color-primary: 198deg 93% 60%;
+  }
   [hidden] {
     display: none !important;
   }

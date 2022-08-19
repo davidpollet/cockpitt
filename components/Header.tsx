@@ -32,6 +32,7 @@ font-bold leading-none text-white`
 
 function HeaderTitle({ user }: { user: userProps | undefined }) {
   const router = useRouter()
+  console.log(router.pathname)
   const currentPage = cockpittPages.find((c) => c.path === router.pathname)
   const cookieSayHello = !Cookies.get("sayHello")
   const sayHelloCondition = useCallback(

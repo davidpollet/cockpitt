@@ -9,13 +9,13 @@ export const cockpittPages = [
   {
     name: "Tâches",
     title: "Mes tâches",
-    path: "/",
+    path: "/app",
     icon: <IconList className={`z-10 h-6 w-6 opacity-60`} />,
   },
   {
     name: "Chiffre d'affaire",
     title: "Suivi du chiffre d'affaire",
-    path: "/suivi-chiffre-d-affaires",
+    path: "/app/suivi-chiffre-d-affaires",
     icon: <IconSuiviCA className={`z-10 h-6 w-6 opacity-60`} />,
   },
   // {

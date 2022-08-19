@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="#5412ce"></rect><path d="M54.32 82.35L54.32 82.35Q48.46 82.35 43.14 80.38Q37.81 78.42 33.73 74.43Q29.65 70.45 27.20 64.45Q24.75 58.45 24.75 50.48L24.75 50.48Q24.75 42.61 27.15 36.51Q29.55 30.42 33.68 26.24Q37.81 22.06 43.38 19.86Q48.94 17.65 55.28 17.65L55.28 17.65Q61.33 17.65 66.22 20.10Q71.12 22.54 74.48 25.71L74.48 25.71L65.46 35.89Q63.25 33.97 60.85 32.91Q58.45 31.86 55.28 31.86L55.28 31.86Q52.40 31.86 49.90 33.10Q47.41 34.35 45.58 36.66Q43.76 38.96 42.70 42.32Q41.65 45.68 41.65 49.90L41.65 49.90Q41.65 58.74 45.68 63.44Q49.71 68.14 56.05 68.14L56.05 68.14Q59.12 68.14 61.66 66.75Q64.21 65.36 66.22 63.15L66.22 63.15L75.25 73.14Q71.31 77.74 65.98 80.05Q60.66 82.35 54.32 82.35Z" fill="#ffffff"></path></svg>
+<svg viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2">
+  <path d="M16 32c8.837 0 16-7.163 16-16S24.837 0 16 0 0 7.163 0 16s7.163 16 16 16ZM14.817 6.421h2v8.886h8.887v2H14.817V6.421Zm-5.959.437h2v14.283h14.283v2H8.858V6.858Z" style="fill:url(#a);fill-rule:nonzero" transform="scale(1.79001)"/>
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="scale(32) rotate(25)">
+      <stop offset="0" style="stop-color:#3616ac;stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#e09bed;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+</svg>

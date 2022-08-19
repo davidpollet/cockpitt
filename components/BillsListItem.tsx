@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { MouseEvent, useRef, useState } from "react"
 import { useDeleteBill, useUpdateBill } from "@hooks/billsHooks"
 
 import BillStatus from "./BillStatus"
@@ -28,7 +28,7 @@ function BillsListItem({ bill }: { bill: billProps }) {
         `lg:gap-2 lg:px-0`,
         `${showDeleteConfirmation ? "lg:py-3" : "lg:py-0"}`,
       ]),
-    [showDeleteConfirmation]
+    [showDeleteConfirmation],
   )
 
   const removeBillButtonTwClass = React.useMemo(
@@ -37,9 +37,9 @@ function BillsListItem({ bill }: { bill: billProps }) {
         `button is-ghost ml-auto grow rounded-none from-violet-500 to-violet-500
       bg-w-0/h-full bg-right-top text-2xl`,
         `dark:text-violet-100`,
-        `${showDeleteConfirmation && "scale-0"}`
+        `${showDeleteConfirmation && "scale-0"}`,
       ),
-    [showDeleteConfirmation]
+    [showDeleteConfirmation],
   )
 
   return (
@@ -177,7 +177,7 @@ function EditableBox({
     if (boxTarget.contentEditable === "false") {
       showToast(
         "La facture n'est plus éditable depuis qu'elle a été envoyée",
-        ""
+        "",
       )
     }
   }

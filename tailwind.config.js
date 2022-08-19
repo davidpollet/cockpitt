@@ -1,15 +1,26 @@
 const twColors = require('tailwindcss/colors')
 const plugin = require('tailwindcss/plugin')
+
+function withOpacityValue (variable) {
+  return ({ opacityValue }) => {
+    if (opacityValue === undefined) {
+      return `hsl(var(${variable}))`
+    }
+    return `hsl(var(${variable}) / ${opacityValue})`
+  }
+}
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './views/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}'
+    './components/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
     colors: {
       currentColor: 'currentColor',
+      primary: withOpacityValue('--color-primary'),
       gray: twColors.gray,
       green: twColors.green,
       red: twColors.red,
@@ -34,68 +45,71 @@ module.exports = {
         800: 'hsl(261, 84%, 21%)',
         850: 'hsl(261, 84%, 15%)',
         900: 'hsl(261, 84%, 10%)',
-        950: 'hsl(261, 84%, 3%)'
-      }
+        950: 'hsl(261, 84%, 3%)',
+      },
     },
     extend: {
+      maxWidth: {
+        '8xl': '90rem', //1440px
+      },
       gridTemplateColumns: {
-        'main-layout': '1fr minmax(auto, 20ch)'
+        'main-layout': '1fr minmax(auto, 20ch)',
       },
       animation: {
         spin: 'spin 600ms linear infinite',
         loading: 'loading 1200ms ease-in-out infinite',
         fadeIn: 'fadeIn 600ms ease forwards',
         fadeOut: 'fadeOut 600ms ease forwards',
-        shake: '1000ms ease shake backwards'
+        shake: '1000ms ease shake backwards',
       },
       keyframes: {
         loading: {
           '0%': {
             strokeDasharray: '1, 200',
-            strokeDashoffset: '0'
+            strokeDashoffset: '0',
           },
           '50%': {
             strokeDasharray: '90, 200',
-            strokeDashoffset: '-35px'
+            strokeDashoffset: '-35px',
           },
           '100%': {
-            strokeDashoffset: '-124px'
-          }
+            strokeDashoffset: '-124px',
+          },
         },
         fadeOut: {
           '100%': {
-            opacity: 0
-          }
+            opacity: 0,
+          },
         },
         fadeIn: {
           '100%': {
-            opacity: 1
-          }
+            opacity: 1,
+          },
         },
         shake: {
           '10%, 90%': {
-            transform: 'rotate(-20deg)'
+            transform: 'rotate(-20deg)',
           },
           '20%, 80%': {
-            transform: 'rotate(10deg)'
+            transform: 'rotate(10deg)',
           },
           '30%, 50%, 70%': {
-            transform: 'rotate(-20deg)'
+            transform: 'rotate(-20deg)',
           },
           '40%, 60%': {
-            transform: 'rotate(10deg)'
-          }
-        }
+            transform: 'rotate(10deg)',
+          },
+        },
       },
       backgroundSize: {
         'w-0/h-0': '0 0',
         'w-0/h-full': '0 100%',
         'w-full/h-0': '100% 0',
-        'w-full/h-full': '100% 100%'
+        'w-full/h-full': '100% 100%',
       },
       borderRadius: {
-        inherit: 'inherit'
-      }
+        inherit: 'inherit',
+      },
     },
     screens: {
       '<sm': { max: '39.999375em' },
@@ -107,8 +121,8 @@ module.exports = {
       '<xl': { max: '79.999375em' },
       xl: '80em', //1280px
       '<2xl': { max: '95,999375em' },
-      '2xl': '96em' //1536px
-    }
+      '2xl': '96em', //1536px
+    },
   },
   plugins: [
     plugin(function ({ addVariant }) {
@@ -121,6 +135,6 @@ module.exports = {
           })
         })
       })
-    })
-  ]
+    }),
+  ],
 }

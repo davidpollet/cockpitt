@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="opacity:0.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:svgjs="http://svgjs.dev/svgjs" viewBox="0 0 800 800">
+  <defs>
+    <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="ffflurry-grad" gradientTransform="rotate(270)">
+      <stop stop-color="hsl(0, 0%, 100%)" stop-opacity="1" offset="0%"></stop>
+      <stop stop-color="#5412ce" stop-opacity="1" offset="45%"></stop>
+      <stop stop-color="hsl(0, 0%, 100%)" stop-opacity="1" offset="100%"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="hsl(0, 0%, 100%)"></rect>
+  <g fill="url(#ffflurry-grad)">
+    <rect width="458" height="4" x="-103" y="345" rx="2" transform="rotate(131, 126, 347)" opacity="0.26"></rect>
+    <rect width="713" height="4" x="328.5" y="704" rx="2" transform="rotate(131, 685, 706)" opacity="0.89"></rect>
+    <rect width="927" height="4" x="138.5" y="67" rx="2" transform="rotate(131, 602, 69)" opacity="0.97"></rect>
+    <rect width="1584" height="4" x="-393" y="206" rx="2" transform="rotate(131, 399, 208)" opacity="0.39"></rect>
+    <rect width="429" height="4" x="-29.5" y="93" rx="2" transform="rotate(131, 185, 95)" opacity="0.88"></rect>
+    <rect width="1330" height="4" x="31" y="486" rx="2" transform="rotate(131, 696, 488)" opacity="0.92"></rect>
+    <rect width="236" height="4" x="338" y="663" rx="2" transform="rotate(131, 456, 665)" opacity="0.19"></rect>
+    <rect width="144" height="4" x="680" y="180" rx="2" transform="rotate(131, 752, 182)" opacity="0.50"></rect>
+    <rect width="1310" height="4" x="-222" y="431" rx="2" transform="rotate(131, 433, 433)" opacity="0.50"></rect>
+    <rect width="548" height="4" x="356" y="280" rx="2" transform="rotate(131, 630, 282)" opacity="0.84"></rect>
+    <rect width="711" height="4" x="-189.5" y="644" rx="2" transform="rotate(131, 166, 646)" opacity="0.55"></rect>
+  </g>
+</svg>
