@@ -139,7 +139,6 @@ const LandingPage: NextPage = () => {
                   height="680"
                   aria-hidden
                   loading="lazy"
-                  placeholder="blur"
                 />
               </div>
             </div>
@@ -203,8 +202,8 @@ const LandingPage: NextPage = () => {
                   className="rounded-xl"
                   width="1200"
                   height="680"
+                  aria-hidden
                   loading="lazy"
-                  placeholder="blur"
                 />
               </div>
             </div>
