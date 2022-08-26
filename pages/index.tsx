@@ -212,21 +212,21 @@ const LandingPage: NextPage = () => {
                 <span className="flex h-16 w-16 rounded-md  border-2 border-violet-350 bg-violet-500 text-5xl ring-2 ring-violet-200">
                   <IconCashed className="m-auto h-8 w-8" />
                 </span>
-                Suivez vos factures et votre chiffres d'affaires
+                Suivez vos factures et votre chiffre d'affaires
               </h3>
               <ul className="grid gap-4">
                 <li className="flex items-center gap-2 text-white/80">
                   <span className="rounded-md border-2 border-violet-350 bg-violet-500 ring-2 ring-violet-200">
                     <IconCheck />
                   </span>
-                  Votre chiffre d'affaires réalisée et à venir
+                  Votre chiffre d'affaires réalisé et à venir
                 </li>
                 <li className="flex items-center gap-2 text-white/80">
                   <span className="rounded-md border-2 border-violet-350 bg-violet-500 ring-2 ring-violet-200">
                     <IconCheck />
                   </span>
-                  Ayez un aperçu direct vos factures à faire, celles envoyées et
-                  celles en retard
+                  Ayez un aperçu direct de vos factures à faire, celles envoyées
+                  et celles en retard
                 </li>
               </ul>
               <Link href="/app/suivi-chiffre-d-affaires">
