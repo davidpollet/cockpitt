@@ -1,8 +1,8 @@
 import { IconTurnover, IncomesPending } from "./Icons.index"
-import React, { useEffect, useState } from "react"
 
+import React from "react"
 import { RootState } from "@store/store"
-import animateNumber from "@helpers/animateNumbers"
+import animateNumbers from "@helpers/animateNumbers"
 import formatAmount from "@helpers/formatAmount"
 import turnoverFiltered from "@helpers/turnoverFiltered"
 import { useSelector } from "react-redux"
@@ -33,32 +33,27 @@ function Turnover({
   )
 }
 
+function useAnimateNumbers(n: number) {
+  const ref = React.useRef(0)
+  const [x, setX] = React.useState(0)
+  if (ref.current !== n) {
+    const memo = ref.current
+    ref.current = n
+    return animateNumbers(setX, memo, n)
+  }
+
+  return x
+}
+
 function Turnovers() {
   const bills = useSelector((state: RootState) => state.income.bills)
   const turnovers = {
     current: turnoverFiltered(bills, "CASHED"),
     coming: turnoverFiltered(bills, "NOT CASHED"),
   }
-  const [turnoverCurrent, setTurnoverCurrent] = useState(turnovers.current)
-  const [turnoverComing, setTurnoverComing] = useState(turnovers.coming)
 
-  useEffect(() => {
-    const animateTurnoverCurrent = animateNumber(
-      setTurnoverCurrent,
-      turnoverCurrent,
-      turnovers.current,
-    )
-    const animateTurnoverComing = animateNumber(
-      setTurnoverComing,
-      turnoverComing,
-      turnovers.coming,
-    )
-
-    return () => {
-      cancelAnimationFrame(animateTurnoverCurrent)
-      cancelAnimationFrame(animateTurnoverComing)
-    }
-  }, [turnovers]) // eslint-disable-line react-hooks/exhaustive-deps
+  const turnoverCurrent = useAnimateNumbers(turnovers.current)
+  const turnoverComing = useAnimateNumbers(turnovers.coming)
 
   return (
     <div className="gap-4 <lg:flex <lg:justify-end lg:grid">

@@ -64,7 +64,7 @@ const LandingPage: NextPage = () => {
           <div className="w-fit rounded-md rounded-b-none <sm:fixed <sm:left-2 <sm:right-2 <sm:bottom-0 <sm:z-10 <sm:mx-auto <sm:flex <sm:bg-white <sm:p-2 sm:absolute sm:right-0">
             <Link
               href="/app"
-              className="button is-ghost group mx-auto bg-gradient-to-l from-violet-500 font-bold uppercase text-violet-500"
+              className="button bg-w-0/h-full is-ghost group mx-auto bg-gradient-to-l from-violet-500 to-violet-300 font-bold uppercase text-violet-500"
             >
               {status === "authenticated" ? "Ouvrir " : "Tester "}Cockpitt
               <IconChevronRight className="translate-y-[1px]  scale-75" />
