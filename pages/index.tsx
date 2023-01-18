@@ -244,7 +244,7 @@ const LandingPage: NextPage = () => {
         </section>
 
         <footer className="section-footer flex flex-col items-center overflow-hidden pb-10 <sm:pb-20">
-          <DividerWave class="w-[150vw]" />
+          <DividerWave className="w-[150vw]" />
           <div className="-mt-4 rounded-md rounded-b-none text-center">
             <LogoCockpitt className="inline-block h-11" />
           </div>
