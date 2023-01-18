@@ -1,8 +1,8 @@
-function animateNumber(
+function animateNumbers(
   callback: Function,
   start: number,
   end: number,
-  duration = 400
+  duration = 400,
 ): number {
   let startTimestamp: number | null = null
 
@@ -22,4 +22,4 @@ function animateNumber(
   return window.requestAnimationFrame(step)
 }
 
-export default animateNumber
+export default animateNumbers
