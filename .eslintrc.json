@@ -2,6 +2,7 @@
   "extends": ["next/core-web-vitals", "eslint:recommended"],
   "rules": {
     "react/no-unescaped-entities": "off",
-    "no-extra-semi": "off"
+    "no-extra-semi": "off",
+    "no-console": "error"
   }
 }
