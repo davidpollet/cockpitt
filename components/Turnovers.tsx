@@ -33,16 +33,16 @@ function Turnover({
   )
 }
 
-function useAnimateNumbers(n: number) {
-  const ref = React.useRef(0)
-  const [x, setX] = React.useState(0)
-  if (ref.current !== n) {
-    const memo = ref.current
-    ref.current = n
-    return animateNumbers(setX, memo, n)
+function useAnimateNumbers(target: number) {
+  const previous = React.useRef(0)
+  const [number, setNumber] = React.useState(0)
+  if (previous.current !== target) {
+    const memo = previous.current
+    previous.current = target
+    return animateNumbers(setNumber, memo, target)
   }
 
-  return x
+  return number
 }
 
 function Turnovers() {
