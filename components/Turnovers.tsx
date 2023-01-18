@@ -1,5 +1,5 @@
 import { IconTurnover, IncomesPending } from "./Icons.index"
-import { SVGProps, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import { RootState } from "@store/store"
 import animateNumber from "@helpers/animateNumbers"
@@ -12,7 +12,7 @@ function Turnover({
   label,
   turnover,
 }: {
-  icon: SVGProps<SVGElement>
+  icon: React.ReactElement
   label: "Chiffres d'affaires" | "À venir"
   turnover: number
 }) {
@@ -46,12 +46,12 @@ function Turnovers() {
     const animateTurnoverCurrent = animateNumber(
       setTurnoverCurrent,
       turnoverCurrent,
-      turnovers.current
+      turnovers.current,
     )
     const animateTurnoverComing = animateNumber(
       setTurnoverComing,
       turnoverComing,
-      turnovers.coming
+      turnovers.coming,
     )
 
     return () => {
