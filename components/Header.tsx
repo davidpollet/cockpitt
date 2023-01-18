@@ -19,7 +19,7 @@ function Header() {
   return (
     <header className="flex justify-around bg-violet-500 px-4 py-4 dark:bg-violet-850 sm:py-8 lg:col-span-2 lg:px-3">
       <HeaderTitle user={user} />
-      <div className="relative flex grow justify-end gap-2">
+      <div className="relative z-30 flex grow justify-end gap-2">
         <ThemeColorSwitch />
         {user?.email ? <UserMenu /> : <SignInButton />}
       </div>
