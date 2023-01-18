@@ -11,10 +11,9 @@ function UserAvatar() {
       {image ? (
         <Image
           src={image}
-          width="64px"
-          height="64px"
+          width={64}
+          height={64}
           sizes="64px"
-          layout="responsive"
           alt={user?.name || ""}
         />
       ) : (

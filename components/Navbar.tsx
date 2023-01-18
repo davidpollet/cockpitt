@@ -81,13 +81,17 @@ type navLink = {
 
 function NavLink({ name, path, icon, isActive, ...rest }: navLink) {
   return (
-    <Link href={path} shallow={true} {...rest}>
-      <a className={`nav-link <sm:flex-col ${isActive ? "is-active" : null}`}>
-        {icon}
-        <span className="z-10">{name}</span>
-      </a>
-    </Link>
-  )
+    (<Link
+      href={path}
+      shallow={true}
+      {...rest}
+      className={`nav-link <sm:flex-col ${isActive ? "is-active" : null}`}>
+
+      {icon}
+      <span className="z-10">{name}</span>
+
+    </Link>)
+  );
 }
 
 export default Navbar
