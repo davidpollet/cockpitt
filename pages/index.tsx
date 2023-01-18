@@ -18,8 +18,6 @@ const LandingPage: NextPage = () => {
   const pageRef = useRef<HTMLDivElement>(null)
   const { status } = useSession()
 
-  console.log(status)
-
   useEffect(() => {
     if (!pageRef.current) return
     const { current: page } = pageRef
@@ -31,7 +29,6 @@ const LandingPage: NextPage = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          console.log(entry.intersectionRatio)
           if (entry.isIntersecting) {
             entry.target.classList.add("is-inview")
           }
@@ -65,11 +62,12 @@ const LandingPage: NextPage = () => {
         <header className="relative m-auto flex max-w-8xl flex-wrap items-center justify-center px-2 pt-4">
           <LogoCockpitt className="ml-auto mr-auto w-48" />
           <div className="w-fit rounded-md rounded-b-none <sm:fixed <sm:left-2 <sm:right-2 <sm:bottom-0 <sm:z-10 <sm:mx-auto <sm:flex <sm:bg-white <sm:p-2 sm:absolute sm:right-0">
-            <Link href="/app">
-              <a className="button is-ghost group mx-auto bg-gradient-to-l from-violet-500 font-bold uppercase text-violet-500">
-                {status === "authenticated" ? "Ouvrir " : "Tester "} Cockpitt
-                <IconChevronRight className="translate-y-[1px]  scale-75" />
-              </a>
+            <Link
+              href="/app"
+              className="button is-ghost group mx-auto bg-gradient-to-l from-violet-500 font-bold uppercase text-violet-500"
+            >
+              {status === "authenticated" ? "Ouvrir " : "Tester "}Cockpitt
+              <IconChevronRight className="translate-y-[1px]  scale-75" />
             </Link>
           </div>
         </header>
@@ -89,14 +87,15 @@ const LandingPage: NextPage = () => {
                 projets et de votre chiffre d'affaires
               </p>
               <div className="self-start text-center md:self-center">
-                <Link href="/app">
-                  <a className="button is-filled group relative mt-2 bg-gradient-to-l px-8 py-3 font-bold uppercase">
-                    Tester Cockpitt
-                    <IconChevronRight className="scale-75" />
-                    <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-white px-2 py-1 text-xs text-violet-500 shadow-sm transition group-hover:text-violet-300">
-                      100% gratuit
-                    </span>
-                  </a>
+                <Link
+                  href="/app"
+                  className="button is-filled group relative mt-2 bg-gradient-to-l px-8 py-3 font-bold uppercase"
+                >
+                  Tester Cockpitt
+                  <IconChevronRight className="scale-75" />
+                  <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-white px-2 py-1 text-xs text-violet-500 shadow-sm transition group-hover:text-violet-300">
+                    100% gratuit
+                  </span>
                 </Link>
               </div>
             </div>
@@ -181,14 +180,15 @@ const LandingPage: NextPage = () => {
                 </li>
               </ul>
 
-              <Link href="/app">
-                <a className="button is-filled group relative mt-2 justify-center justify-self-start bg-white bg-gradient-to-l px-8 py-3 font-bold uppercase text-violet-500">
-                  Suivi des projets
-                  <IconChevronRight className="scale-75" />
-                  <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-violet-500 px-2 py-1 text-xs text-violet-50 shadow-sm transition group-hover:text-white">
-                    Testez-le
-                  </span>
-                </a>
+              <Link
+                href="/app"
+                className="button is-filled group relative mt-2 justify-center justify-self-start bg-white bg-gradient-to-l px-8 py-3 font-bold uppercase text-violet-500"
+              >
+                Suivi des projets
+                <IconChevronRight className="scale-75" />
+                <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-violet-500 px-2 py-1 text-xs text-violet-50 shadow-sm transition group-hover:text-white">
+                  Testez-le
+                </span>
               </Link>
             </div>
           </div>
@@ -229,14 +229,15 @@ const LandingPage: NextPage = () => {
                   et celles en retard
                 </li>
               </ul>
-              <Link href="/app/suivi-chiffre-d-affaires">
-                <a className="button is-filled viol group relative mt-2 justify-center justify-self-start bg-white bg-gradient-to-l px-8 py-3 font-bold uppercase text-violet-500">
-                  Suivi du <abbr title="Chiffre d'affaires">C.A.</abbr>
-                  <IconChevronRight className="scale-75" />
-                  <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-violet-500 px-2 py-1 text-xs text-violet-50 shadow-sm transition group-hover:text-white">
-                    Testez-le
-                  </span>
-                </a>
+              <Link
+                href="/app/suivi-chiffre-d-affaires"
+                className="button is-filled viol group relative mt-2 justify-center justify-self-start bg-white bg-gradient-to-l px-8 py-3 font-bold uppercase text-violet-500"
+              >
+                Suivi du<abbr title="Chiffre d'affaires">C.A.</abbr>
+                <IconChevronRight className="scale-75" />
+                <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-violet-500 px-2 py-1 text-xs text-violet-50 shadow-sm transition group-hover:text-white">
+                  Testez-le
+                </span>
               </Link>
             </div>
           </div>
