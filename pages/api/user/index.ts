@@ -22,7 +22,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const user = req.body
-
   if (!user.id) {
     return res
       .status(422)
@@ -33,7 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     .collection("users")
     .insertOne(user)
     .then(() =>
-      res.status(201).json({ message: "Utilisateur créé !", data: user })
+      res.status(201).json({ message: "Utilisateur créé !", data: user }),
     )
     .catch(() => res.status(500).json({ error: "An error occured" }))
     .finally(() => client.close())

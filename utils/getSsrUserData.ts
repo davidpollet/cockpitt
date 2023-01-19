@@ -1,9 +1,8 @@
 import FetchWrapper from "@helpers/FetchWrapper"
 import { GetServerSidePropsContext } from "next"
-import USER_ID_COOKIE_NAME from "@consts/userIdCookie"
+import { Session } from "next-auth"
 import { getSession } from "next-auth/react"
 import { nanoid } from "nanoid"
-import nookies from "nookies"
 
 function getSsrUserData(
   dataApiPath: string,
@@ -11,7 +10,7 @@ function getSsrUserData(
   options = {
     protectedPage: false,
     redirectTo: "/login",
-  }
+  },
 ) {
   return async function (context: GetServerSidePropsContext) {
     const dev = process.env.NODE_ENV !== "production"
@@ -22,8 +21,6 @@ function getSsrUserData(
     const session = await getSession({ req: context.req })
     const api = new FetchWrapper(`${server}/api`)
     if (!session) {
-      nookies.destroy(context, USER_ID_COOKIE_NAME)
-
       if (options.protectedPage) {
         context.res.writeHead(302, { Location: options.redirectTo })
         context.res.end()
@@ -33,30 +30,18 @@ function getSsrUserData(
       }
     }
 
-    let { userId } = nookies.get(context)
-    let user = {
+    type User = Session["user"] & { id?: string }
+    let user: User = {
       ...session.user,
-      id: userId,
     }
 
-    if (!user.id) {
-      let userDb = await api.get(`/user/${user.email}`)
-      if (userDb.id) {
-        user.id = userDb.id
-      } else {
-        userId = nanoid()
-        try {
-          await api.post(`/user/`, { ...user, id: userId })
-          user.id = userId
-        } catch (err) {
-          throw new Error("Erreur pendant la création de l'utilisateur")
-        }
-      }
+    let userDb = await api.get(`/user/${user.email}`)
 
-      nookies.set(context, USER_ID_COOKIE_NAME, user.id, {
-        expires: new Date(session.expires),
-        SameSite: "strict",
-      })
+    if (!userDb.email) {
+      user.id = nanoid()
+      await api.post("/user", user)
+    } else {
+      user = userDb
     }
 
     const userData = await api.get(`${dataApiPath}/${user.id}`)
