@@ -20,6 +20,7 @@ function getSsrUserData(
 
     const session = await getSession({ req: context.req })
     const api = new FetchWrapper(`${server}/api`)
+
     if (!session) {
       if (options.protectedPage) {
         context.res.writeHead(302, { Location: options.redirectTo })
@@ -30,25 +31,22 @@ function getSsrUserData(
       }
     }
 
-    type User = Session["user"] & { id?: string }
+    type User = Session["user"] & { id: string }
     let user: User = {
       ...session.user,
+      id: nanoid(),
     }
 
-    let userDb = await api.get(`/user/${user.email}`)
-
-    if (!userDb.email) {
-      user.id = nanoid()
-      await api.post("/user", user)
-    } else {
-      user = userDb
+    const userDB = await api.get(`/user/${user.email}`)
+    if (!userDB.id) {
+      await api.patch(`/user/${user.email}/${user.id}`, user.id)
     }
 
-    const userData = await api.get(`${dataApiPath}/${user.id}`)
+    const userData = await api.get(`${dataApiPath}/${userDB.id}`)
 
     return {
       props: {
-        user,
+        user: userDB || user,
         userData,
       },
     }

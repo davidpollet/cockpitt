@@ -4,9 +4,8 @@ import { connectToDatabase } from "@helpers/db"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   let client
-  const { email } = req.query
   const { method } = req
-
+  const { email, id } = req.query
   try {
     client = await connectToDatabase()
   } catch (error) {
@@ -18,11 +17,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   switch (method) {
-    case "GET":
+    case "PATCH":
       try {
         const userCollection = client.db().collection("users")
         await userCollection
-          .findOne({ email: email }, { projection: { _id: 0 } })
+          .updateOne({ email }, { $set: { id } })
           .then((response) => {
             return res.status(200).json(response)
           })
