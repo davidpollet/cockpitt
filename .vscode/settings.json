@@ -1,6 +1,23 @@
 {
   "workbench.colorCustomizations": {
-    "activityBar.activeBorder": "#ed7332"
+    "activityBar.activeBorder": "#ed7332",
+    "activityBar.activeBackground": "#6c27ec",
+    "activityBar.background": "#6c27ec",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#ed7332",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#6c27ec",
+    "statusBar.background": "#5412ce",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#6c27ec",
+    "statusBarItem.remoteBackground": "#5412ce",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#5412ce",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#5412ce99",
+    "titleBar.inactiveForeground": "#e7e7e799"
   },
   "peacock.color": "hsl(261, 84%, 44%)",
   "search.exclude": {
@@ -10,5 +27,6 @@
   "eslint.nodePath": ".yarn/sdks",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "peacock.remoteColor": "#5412ce"
 }

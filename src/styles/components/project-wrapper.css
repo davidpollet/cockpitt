@@ -1,0 +1,10 @@
+@layer components {
+  .project-wrapper.is-target {
+    border-color: theme(colors.violet.200);
+    box-shadow: theme(boxShadow.lg);
+
+    .dark & {
+      border-color: theme(colors.violet.100);
+    }
+  }
+}

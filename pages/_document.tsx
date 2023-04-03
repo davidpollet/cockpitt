@@ -1,27 +1,12 @@
 import { Head, Html, Main, NextScript } from "next/document"
 
+import Script from "next/script"
+
 export default function Document() {
   return (
     <Html lang="fr">
       <Head>
-        <script
-          id="darkmode"
-          dangerouslySetInnerHTML={{
-            __html: `
-          ;(function darkModeCheck () {
-            const isDarkMode =
-              localStorage.getItem('color-theme') === 'dark' ||
-              (!('color-theme' in localStorage) &&
-                window.matchMedia('(prefers-color-scheme: dark)').matches)
-            if (isDarkMode) {
-              document.documentElement.classList.add('dark')
-            } else {
-              document.documentElement.classList.remove('dark')
-            }
-          })()
-          `,
-          }}
-        />
+        <Script src="/js/darkModeCheck.js" strategy="beforeInteractive" />
         <link rel="icon" href="/img/favicon.ico" sizes="any" />
         <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
@@ -54,7 +39,7 @@ export default function Document() {
           content="https://cockpitt.vercel.app/img/og-stack.jpg"
         />
       </Head>
-      <body>
+      <body style={{ background: "#1d0646" }}>
         <Main />
         <NextScript />
       </body>

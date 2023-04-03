@@ -1,28 +1,35 @@
-import {
-  IconCashed,
-  IconCheck,
-  IconChevronRight,
-} from "@components/Icons.index"
-import { useEffect, useRef } from "react"
-
 import DividerWave from "../public/img/divider-wave-opaque.svg"
 import Head from "next/head"
+import { IconArrowDownCircleOutline } from "src/ui/icons/ArrowDownCircleOutline"
+import { IconCashed } from "src/ui/icons/Cashed"
+import { IconCheck } from "src/ui/icons/Check"
+import { IconChevronRight } from "src/ui/icons/ChevronRight"
 import Image from "next/image"
 import Link from "next/link"
 import LogoCockpitt from "../public/img/logo-cockpitt.svg"
 import { NextPage } from "next"
-import { TbArrowDownCircle } from "react-icons/tb"
+import React from "react"
+import { fetcher } from "src/lib/utils/fetcher"
+import { preload } from "swr"
 import { useSession } from "next-auth/react"
+import { userApiRoute } from "src/lib/utils/FetchWrapper"
 
 const LandingPage: NextPage = () => {
-  const pageRef = useRef<HTMLDivElement>(null)
-  const { status } = useSession()
+  const pageRef = React.useRef<HTMLDivElement>(null)
+  const { status, data } = useSession()
 
-  useEffect(() => {
+  React.useEffect(() => {
+    if (data?.user?.email) {
+      preload(`${userApiRoute}/${data.user.email}`, fetcher)
+    }
+  }, [data?.user?.email])
+
+  React.useEffect(() => {
     if (!pageRef.current) return
     const { current: page } = pageRef
-    const animateOnScroll = page.querySelectorAll(".animate-on-scroll")
-    const [sectionBanner] = Array(animateOnScroll[0])
+    const sectionsToAnimateOnScroll =
+      page.querySelectorAll(".animate-on-scroll")
+    const [sectionBanner] = Array(sectionsToAnimateOnScroll[0])
 
     sectionBanner.classList.add("is-inview")
 
@@ -39,7 +46,7 @@ const LandingPage: NextPage = () => {
       },
     )
 
-    animateOnScroll.forEach((el) => {
+    sectionsToAnimateOnScroll.forEach((el) => {
       observer.observe(el)
     })
 
@@ -58,13 +65,15 @@ const LandingPage: NextPage = () => {
         />
       </Head>
 
-      <div className="site" ref={pageRef}>
+      <div className="site bg-white" ref={pageRef}>
         <header className="relative m-auto flex max-w-8xl flex-wrap items-center justify-center px-2 pt-4">
-          <LogoCockpitt className="ml-auto mr-auto w-48" />
-          <div className="w-fit rounded-md rounded-b-none <sm:fixed <sm:left-2 <sm:right-2 <sm:bottom-0 <sm:z-10 <sm:mx-auto <sm:flex <sm:bg-white <sm:p-2 sm:absolute sm:right-0">
+          <LogoCockpitt className="ml-auto mr-auto h-auto w-48" />
+          <div className="w-fit rounded-md rounded-b-none <sm:fixed <sm:left-2 <sm:right-2 <sm:bottom-0 <sm:z-10 <sm:mx-auto <sm:flex <sm:bg-violet-200 <sm:p-1 sm:absolute sm:right-0">
             <Link
               href="/app"
-              className="button bg-w-0/h-full is-ghost group mx-auto bg-gradient-to-l from-violet-500 to-violet-300 font-bold uppercase text-violet-500"
+              className={`button is-ghost group mx-auto bg-gradient-to-l from-violet-500 to-violet-300 bg-w-0/h-full font-bold uppercase text-violet-500 ${
+                status === "loading" ? "opacity-0" : ""
+              }`}
             >
               {status === "authenticated" ? "Ouvrir " : "Tester "}Cockpitt
               <IconChevronRight className="translate-y-[1px]  scale-75" />
@@ -72,52 +81,64 @@ const LandingPage: NextPage = () => {
           </div>
         </header>
         {/* Banner */}
-        <section className="section-banner animate-on-scroll relative isolate py-12 md:text-center lg:text-left">
-          <div className="mx-auto grid max-w-8xl <xl:grid-cols-1 <xl:gap-10 xl:grid-cols-3 xl:pl-8">
-            <div className="banner-content relative z-10 mx-auto flex max-w-2xl flex-col gap-3 px-4">
-              <h2 className="text-2xl font-black uppercase tracking-wide text-violet-800 sm:text-3xl md:text-4xl lg:text-5xl">
-                <span className="text-violet-500">La vue d'ensemble</span> de
-                votre entreprise
+        <section className="section-banner animate-on-scroll relative isolate md:text-center">
+          <div className="mx-auto grid min-h-[75vh] max-w-8xl place-content-center xl:pl-8">
+            <div className="banner-content relative z-10 mx-auto flex max-w-5xl flex-col gap-3 px-4">
+              <h2 className="text-4xl font-black uppercase tracking-wide text-violet-800 sm:text-5xl lg:text-6xl">
+                <span className="bg-gradient-to-bl from-violet-250 to-violet-500 bg-clip-text text-transparent">
+                  La vue d'ensemble
+                </span>{" "}
+                de votre entreprise
               </h2>
-              <p className="mx-auto max-w-[80ch] text-lg text-violet-800/80 <md:border-l-4 <md:border-violet-500 <md:pl-4">
-                <strong className="text-violet-500">
-                  Cockpitt vous donne de la clarté.
-                </strong>{" "}
-                En un clin d'oeil, voyez où vous en êtes au niveau de vos
-                projets et de votre chiffre d'affaires
-              </p>
-              <div className="self-start text-center md:self-center">
+              <ul className="grid gap-4 text-violet-800/80 md:flex md:flex-wrap md:justify-center">
+                <li className="flex items-center gap-2 leading-tight md:text-lg">
+                  <span className="80 rounded-md border-2 border-violet-500 bg-violet-500/0 ring-2 ring-violet-200">
+                    <IconCheck className="text-violet-500" />
+                  </span>
+                  Toutes vos tâches projets réunis sur une page
+                </li>
+                <li className="flex items-center gap-2 leading-tight md:text-lg">
+                  <span className="80 rounded-md border-2 border-violet-500 bg-violet-500/0 ring-2 ring-violet-200">
+                    <IconCheck className="text-violet-500" />
+                  </span>
+                  Créez et télécharger vos factures
+                </li>
+                <li className="flex items-center gap-2 leading-tight md:text-lg">
+                  <span className="80 rounded-md border-2 border-violet-500 bg-violet-500/0 ring-2 ring-violet-200">
+                    <IconCheck className="text-violet-500" />
+                  </span>
+                  Suivez où vous en être au niveau du chiffre d'affaires.
+                </li>
+              </ul>
+              <div>
                 <Link
                   href="/app"
-                  className="button is-filled group relative mt-2 bg-gradient-to-l px-8 py-3 font-bold uppercase"
+                  className={`button is-filled group relative mt-2 bg-gradient-to-bl from-violet-250 to-violet-500 bg-w-full/h-full px-8 py-3 font-bold uppercase hocus:bg-w-0/h-0 hocus:shadow-lg hocus:shadow-violet-300`}
                 >
-                  Tester Cockpitt
+                  {status === "authenticated" ? "Ouvrir " : "Tester "}Cockpitt
                   <IconChevronRight className="scale-75" />
-                  <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-white px-2 py-1 text-xs text-violet-500 shadow-sm transition group-hover:text-violet-300">
-                    100% gratuit
-                  </span>
+                  {status === "unauthenticated" ? (
+                    <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 whitespace-nowrap rounded-sm bg-white px-2 py-1 text-xs text-violet-500 shadow-sm transition group-hover:text-violet-300">
+                      Sans inscription
+                    </span>
+                  ) : null}
                 </Link>
               </div>
             </div>
-            <div className="banner-illustration relative isolate z-20 mx-4 flex self-start rounded-2xl px-4  <lg:mt-14 lg:col-span-2 <xl:mx-auto <xl:max-w-4xl">
-              <video
-                src={"/img/video-banner.mp4"}
-                className="video rounded-2xl"
-                width={1920}
-                height={1080}
-                autoPlay
-                controls
-                muted
-                loop
-              />
-            </div>
           </div>
         </section>
+        {/*eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/img/wave-bottom-2.svg"
+          aria-hidden
+          alt=""
+          className="banner-wave w-[200vw] lg:h-32 lg:w-screen"
+        />
 
         <section className="section-features min-h-screen overflow-hidden bg-violet-500 px-4 pb-16">
           <div className="icon-arrow animate-on-scroll mx-auto mb-2 grid h-14 w-14 rounded-full bg-white shadow-xl transition duration-150 lg:h-20 lg:w-20">
-            <TbArrowDownCircle
-              className="m-auto h-10 w-10 stroke-violet-500 lg:h-14 lg:w-14"
+            <IconArrowDownCircleOutline
+              className="m-auto h-10 w-10 text-violet-500 lg:h-14 lg:w-14"
               aria-hidden
             />
           </div>
@@ -159,13 +180,6 @@ const LandingPage: NextPage = () => {
                   <span className="rounded-md border-2 border-violet-350 bg-violet-500 ring-2 ring-violet-200">
                     <IconCheck />
                   </span>
-                  Un espace "inbox" pour les choses dont vous devez vous
-                  rappelez
-                </li>
-                <li className="flex items-center gap-2 text-white/80">
-                  <span className="rounded-md border-2 border-violet-350 bg-violet-500 ring-2 ring-violet-200">
-                    <IconCheck />
-                  </span>
                   Cachez les projets en standby
                 </li>
                 <li className="flex items-center gap-2 text-white/80">
@@ -173,7 +187,7 @@ const LandingPage: NextPage = () => {
                     <IconCheck />
                   </span>
                   <span>
-                    Pour mieux savoir où vous en êtes, les tâches ont un état{" "}
+                    Les tâches sont triées automatiquement selon leur état :{" "}
                     <em>commencée</em>, <em>terminée</em>, <em>validée</em> ou{" "}
                     <em>refusée</em>
                   </span>
@@ -184,10 +198,10 @@ const LandingPage: NextPage = () => {
                 href="/app"
                 className="button is-filled group relative mt-2 justify-center justify-self-start bg-white bg-gradient-to-l px-8 py-3 font-bold uppercase text-violet-500"
               >
-                Suivi des projets
+                Gestion de projets
                 <IconChevronRight className="scale-75" />
                 <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-violet-500 px-2 py-1 text-xs text-violet-50 shadow-sm transition group-hover:text-white">
-                  Testez-le
+                  Testez-la
                 </span>
               </Link>
             </div>
@@ -212,31 +226,39 @@ const LandingPage: NextPage = () => {
                 <span className="flex h-16 w-16 rounded-md  border-2 border-violet-350 bg-violet-500 text-5xl ring-2 ring-violet-200">
                   <IconCashed className="m-auto h-8 w-8" />
                 </span>
-                Suivez vos factures et votre chiffre d'affaires
+                Créez vos factures et suivez l'évolution de votre chiffre
+                d'affaires
               </h3>
               <ul className="grid gap-4">
                 <li className="flex items-center gap-2 text-white/80">
                   <span className="rounded-md border-2 border-violet-350 bg-violet-500 ring-2 ring-violet-200">
                     <IconCheck />
                   </span>
-                  Votre chiffre d'affaires réalisé et à venir
+                  Créez de belles factures en PDF
                 </li>
                 <li className="flex items-center gap-2 text-white/80">
                   <span className="rounded-md border-2 border-violet-350 bg-violet-500 ring-2 ring-violet-200">
                     <IconCheck />
                   </span>
-                  Ayez un aperçu direct de vos factures à faire, celles envoyées
-                  et celles en retard
+                  Cockpitt vous donne une aperçu direct de vos factures : celles
+                  envoyées, celles en retard et celles encaissées
+                </li>
+                <li className="flex items-center gap-2 text-white/80">
+                  <span className="rounded-md border-2 border-violet-350 bg-violet-500 ring-2 ring-violet-200">
+                    <IconCheck />
+                  </span>
+                  Voyez d'un coup d'oeil votre chiffre d'affaires réel et celui
+                  en attente
                 </li>
               </ul>
               <Link
                 href="/app/suivi-chiffre-d-affaires"
                 className="button is-filled viol group relative mt-2 justify-center justify-self-start bg-white bg-gradient-to-l px-8 py-3 font-bold uppercase text-violet-500"
               >
-                Suivi du<abbr title="Chiffre d'affaires">C.A.</abbr>
+                Créez une facture
                 <IconChevronRight className="scale-75" />
                 <span className="absolute left-1/2 top-full block -translate-x-1/2 -translate-y-2 rounded-sm bg-violet-500 px-2 py-1 text-xs text-violet-50 shadow-sm transition group-hover:text-white">
-                  Testez-le
+                  Dès maintenant
                 </span>
               </Link>
             </div>
@@ -244,9 +266,9 @@ const LandingPage: NextPage = () => {
         </section>
 
         <footer className="section-footer flex flex-col items-center overflow-hidden pb-10 <sm:pb-20">
-          <DividerWave className="w-[150vw]" />
+          <DividerWave className="h-auto w-[150vw]" />
           <div className="-mt-4 rounded-md rounded-b-none text-center">
-            <LogoCockpitt className="inline-block h-11" />
+            <LogoCockpitt className="inline-block h-11 w-auto" />
           </div>
         </footer>
       </div>

@@ -1,17 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "@components/*": ["components/*"],
-      "@consts/*": ["utils/consts/*"],
-      "@helpers/*": ["utils/helpers/*"],
-      "@hooks/*": ["utils/hooks/*"],
-      "@localTypes/*": ["utils/types/*"],
-      "@store/*": ["app/store/*"],
-      "@styles/*": ["styles/*"],
-      "@views/*": ["utils/views/*"],
-    },
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -25,7 +15,7 @@
     "jsx": "preserve",
     "incremental": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

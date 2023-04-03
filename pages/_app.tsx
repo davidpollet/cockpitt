@@ -1,46 +1,33 @@
-import "@styles/styles.css"
-import "../public/css/nprogress.css"
+import "../src/styles/styles.css"
+import "../src/styles/nprogress.css"
 
 import type { AppProps } from "next/app"
-import { IconContext } from "react-icons"
-import NProgress from "nprogress"
-import { Provider } from "react-redux"
-import Router from "next/router"
+import React from "react"
+import { SWRConfig } from "swr"
+import { Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
-import store from "@store/store"
-import { useEffect } from "react"
+import { fetcher } from "src/lib/utils/fetcher"
+import { useLoadingProgress } from "src/lib/hooks/useLoadingProgress"
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  NProgress.configure({ showSpinner: false })
-  useEffect(() => {
-    const handleRouteStart = () => NProgress.start()
-    const handleRouteDone = () => NProgress.done()
+type App = {
+  Component: AppProps["Component"]
+  pageProps: {
+    session: Session
+    pageProps: AppProps
+  }
+}
 
-    Router.events.on("routeChangeStart", handleRouteStart)
-    Router.events.on("routeChangeComplete", handleRouteDone)
-    Router.events.on("routeChangeError", handleRouteDone)
-
-    return () => {
-      Router.events.off("routeChangeStart", handleRouteStart)
-      Router.events.off("routeChangeComplete", handleRouteDone)
-      Router.events.off("routeChangeError", handleRouteDone)
-    }
-  }, [])
+function Cockpitt({ Component, pageProps: { session, ...pageProps } }: App) {
+  useLoadingProgress()
   return (
     <>
-      <Provider store={store}>
-        <SessionProvider session={session}>
-          <IconContext.Provider
-            value={{
-              color: "currentColor",
-            }}
-          >
-            <Component {...pageProps} />
-          </IconContext.Provider>
-        </SessionProvider>
-      </Provider>
+      <SessionProvider session={session}>
+        <SWRConfig value={{ fetcher }}>
+          <Component {...pageProps} />
+        </SWRConfig>
+      </SessionProvider>
     </>
   )
 }
 
-export default MyApp
+export default Cockpitt

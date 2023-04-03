@@ -1,14 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { connectToDatabase } from "@helpers/db"
+import { Db } from "mongodb"
+import { MongoClient } from "mongodb"
+import { connectToDatabase } from "src/lib/utils/db"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Méthode non autorisée" })
   }
 
-  let client: any
-  let db: any
+  let client: MongoClient
+  let db: Db
 
   try {
     client = await connectToDatabase()

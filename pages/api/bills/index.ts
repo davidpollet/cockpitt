@@ -1,10 +1,12 @@
+import { Db, MongoClient } from "mongodb"
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { connectToDatabase } from "@helpers/db"
+import { BILLS_COLLECTION } from "./../../../src/lib/utils/db"
+import { connectToDatabase } from "src/lib/utils/db"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  let client: any
-  let db: any
+  let client: MongoClient
+  let db: Db
   const bill = req.body
 
   if (bill.isDummy) {
@@ -23,13 +25,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   await db
-    .collection("bills")
+    .collection(BILLS_COLLECTION)
     .insertOne(bill)
     .then(() => res.status(201).json({ message: "Facture insérée !" }))
     .catch(() =>
       res
         .status(500)
-        .json({ error: "Erreur pendant l'insertion de la facture" })
+        .json({ error: "Erreur pendant l'insertion de la facture" }),
     )
     .finally(() => client.close())
 }
