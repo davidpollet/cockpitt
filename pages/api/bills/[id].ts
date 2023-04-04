@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { connectToDatabase } from "@helpers/db"
+import { BILLS_COLLECTION } from "./../../../src/lib/utils/db"
+import { Db } from "mongodb"
+import { MongoClient } from "mongodb"
+import { connectToDatabase } from "src/lib/utils/db"
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  let client
-  let db
+  let client: MongoClient
+  let db: Db
   const { id } = req.query
   const { method } = req
 
@@ -22,13 +25,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (method) {
     case "GET":
       try {
-        const billsCollection = client.db().collection("bills")
+        const billsCollection = client.db().collection(BILLS_COLLECTION)
         await billsCollection
-          .find({ owner: id }, { projection: { _id: 0 } })
+          .find({ ownerId: id }, { projection: { _id: 0 } })
           .toArray()
-          .then((response) => {
-            res.status(200).json(response)
-          })
+          .then((response) => res.status(200).json(response))
       } catch (error) {
         res.status(500).json({
           error,
@@ -42,16 +43,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       try {
         const bill = req.body
         await db
-          .collection("bills")
+          .collection(BILLS_COLLECTION)
           .updateOne({ id: id }, { $set: { ...bill } })
-          .then((response) => {
-            if (response.modifiedCount === 0) {
-              res.status(404).json({
-                message: "Aucune facture correspondante n'a été trouvée",
-              })
-            }
+          .then(() => {
+            res.status(200).json({ message: "Facture modifiée !" })
           })
-        res.status(200).json({ message: "Facture modifiée !" })
       } catch (error) {
         res.status(500).json({
           error,
@@ -59,16 +55,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         })
       }
       break
-
     case "DELETE":
       try {
-        let { id } = req.query
+        const { id } = req.query
         await db
-          .collection("bills")
+          .collection(BILLS_COLLECTION)
           .deleteOne({ id })
           .then((response) => {
             if (response.deletedCount === 0) {
-              return res.status(404).json({ message: "Facture non trouvée !" })
+              res.status(404).json({ message: "Facture non trouvée !" })
             } else {
               res.status(200).json({ message: "Facture supprimée !" })
             }
@@ -79,10 +74,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           message: "Impossible de suprimer les données",
         })
       }
-      break
-
-    default:
-      null
   }
 
   client.close()

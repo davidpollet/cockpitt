@@ -1,0 +1,79 @@
+@layer components {
+  .site {
+    background: url("/img/ffflurry.svg") center top;
+  }
+
+  .banner-content .button {
+    transition-property: background box-shadow;
+    background-size: 100% 100%;
+
+    &:hover,
+    &:focus {
+      background-size: 300% 200%;
+    }
+  }
+
+
+
+  .section-features {
+    background: no-repeat,
+      url("/img/sprinkle.svg") center top / 200vw auto no-repeat;
+  }
+
+  .section-features .icon-arrow {
+    transform: scale(0);
+    opacity: 0;
+
+    &.is-inview {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .section-features .section-title {
+    span {
+      opacity: 0;
+      position: relative;
+      background: linear-gradient(to left, #fff, #fff) right bottom / 100% 100% no-repeat;
+    }
+
+    &.is-inview span {
+      background-size: 0 100%;
+      opacity: 1;
+    }
+  }
+
+  .section-banner.is-inview,
+  .section-features .feature.is-inview {
+
+    .banner-content,
+    .feature-content {
+      clip-path: inset(-2em);
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .banner-illustration,
+    .feature-illustration {
+      filter: blur(0) brightness(1);
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .section-banner .banner-content,
+  .section-features .feature-content {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: scale(1.2);
+    transition: 300ms ease all;
+  }
+
+  .section-banner .banner-illustration,
+  .section-features .feature-illustration {
+    filter: blur(10px) brightness(1.25);
+    transform: scale(1.1);
+    transition: 300ms ease all;
+    opacity: 0;
+  }
+}

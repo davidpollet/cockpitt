@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const twColors = require('tailwindcss/colors')
 const plugin = require('tailwindcss/plugin')
 
@@ -13,8 +14,7 @@ function withOpacityValue (variable) {
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
-    './views/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
+    './src/**/*.{jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
@@ -24,8 +24,10 @@ module.exports = {
       gray: twColors.gray,
       green: twColors.green,
       red: twColors.red,
+      yellow: twColors.yellow,
       white: 'hsl(0, 0%, 100%)',
       black: 'hsl(0, 0%, 0%)',
+      transparent: 'hsla(0, 0%, 0%, 0)',
       violet: {
         25: 'hsl(261, 84%, 97%)',
         50: 'hsl(261, 84%, 92%)',
@@ -61,8 +63,45 @@ module.exports = {
         fadeIn: 'fadeIn 600ms ease forwards',
         fadeOut: 'fadeOut 600ms ease forwards',
         shake: '1000ms ease shake backwards',
+        yIn: "200ms ease yIn forwards",
+        yOut: "200ms ease yOut forwards",
+        sayHello: "2s ease sayHello forwards",
       },
+
       keyframes: {
+        sayHello: {
+          "0%": {
+            opacity: 0,
+            transform: "translateY(100%)"
+          },
+          "25%": {
+            opacity: 1,
+            transform: "translateY(-50%)"
+          },
+          "75%": {
+            opacity: 1,
+            transform: "translateY(-50%)"
+          },
+          "100%": {
+            opacity: 0,
+            transform: "translateY(100%)"
+          },
+        },
+        yIn: {
+          "100%": {
+            transform: "translateY(0) scale(1)"
+          }
+        },
+        yOut: {
+          "0%": {
+            opacity: 1,
+            transform: "scale(1)",
+          },
+          "100%": {
+            transform: "scale(0.75)",
+            opacity: 0,
+          }
+        },
         loading: {
           '0%': {
             strokeDasharray: '1, 200',

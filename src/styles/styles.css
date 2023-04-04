@@ -1,0 +1,12 @@
+@import "./base.css";
+@import "./components/bill-delete-dialog.css";
+@import "./components/bill-steps.css";
+@import "./components/button.css";
+@import "./components/grid-cols-bills.css";
+@import "./components/project-wrapper.css";
+@import "./components/input.css";
+@import "./pages-templates/homepage-landing.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
