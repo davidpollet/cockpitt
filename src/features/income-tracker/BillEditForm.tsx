@@ -60,14 +60,6 @@ function useOpenedBill() {
   return { openedBill }
 }
 
-export function useUserByBillSource(bill: Bill | undefined) {
-  const { user, dummyUser, localUser } = useUser()
-  if (typeof bill === "undefined") return
-  if (bill.isDummy) return dummyUser
-  if (user?.email) return user
-  return localUser
-}
-
 const inputStyle =
   "rounded-sm py-0 px-1 text-gray-600 outline-none ring-offset-1 transition duration-100 ease-in hover:bg-black/5 focus:ring-2 focus:ring-violet-300 focus-visible:shadow-lg"
 
@@ -135,7 +127,7 @@ export default function BillEditForm() {
   )
   const { updateUser, isUpdating: userIsUpdating } = useUser()
   const lastServiceRowRef = React.useRef<HTMLInputElement>(null)
-  const customerInputRef = React.useRef<HTMLInputElement>(null)
+  const customerInputRef = React.useRef<HTMLInputElement | null>(null)
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [isDownloading, setIsDownloading] = React.useState(false)
   const [invalidNamesInputs, setInvalidNamesInputs] = React.useState<string[]>(
@@ -200,12 +192,19 @@ export default function BillEditForm() {
     }
   }
 
+  React.useEffect(() => {
+    const firstInputEmpty = document.querySelector(
+      "form input:placeholder-shown",
+    ) as HTMLInputElement | undefined
+    if (firstInputEmpty) firstInputEmpty.focus()
+  }, [])
+
   return (
     <Dialog
       open={true}
       onClose={closeBillForm}
       className="fixed inset-0 z-50 overflow-auto"
-      // initialFocus={bill?.customer.name ? lastServiceRowRef : customerInputRef}
+      initialFocus={{ current: null }}
     >
       <DialogOverlay />
       <div className="flex min-h-screen flex-col pt-4">
@@ -713,13 +712,13 @@ const BillCustomer = React.forwardRef<HTMLInputElement>(function BillCustomer(
   }
 
   return (
-    <fieldset className="grid place-content-start gap-1 bg-gray-100 p-2">
+    <fieldset className="grid items-start gap-1 bg-gray-100 p-2">
       <Legend className="contents">Votre client</Legend>
       <label>
         <span className="sr-only">Nom du client :</span>
         <input
           ref={ref}
-          className={`${inputStyle} bg-[transparent] font-sans font-bold text-black`}
+          className={`${inputStyle} w-full bg-transparent font-sans font-bold text-black`}
           placeholder={customerLabelPlaceHolder.name}
           value={bill?.customer?.name}
           onChange={(e) => {
@@ -747,10 +746,10 @@ const BillCustomer = React.forwardRef<HTMLInputElement>(function BillCustomer(
           <ErrorHint message="Nom du client requis" />
         )}
       </label>
-      <label>
+      <label className="w-full">
         <span className="sr-only">Adresse du client</span>
         <input
-          className={`${inputStyle} bg-[transparent]`}
+          className={`${inputStyle} w-full bg-transparent`}
           name={FormData.customerAdress}
           onChange={(e) => handleInputChange("adress", e.currentTarget.value)}
           placeholder={customerLabelPlaceHolder.adress}
@@ -762,10 +761,10 @@ const BillCustomer = React.forwardRef<HTMLInputElement>(function BillCustomer(
           <ErrorHint message="Nom du client requis" />
         )}
       </label>
-      <label>
+      <label className="flex">
         <span>SIREN :</span>
         <input
-          className={`${inputStyle} bg-[transparent] lining-nums`}
+          className={`${inputStyle} grow bg-transparent lining-nums`}
           name={FormData.customerSiren}
           onChange={(e) => handleInputChange("siren", e.currentTarget.value)}
           pattern={`${REGEX_SIREN}`.replaceAll("/", "")}

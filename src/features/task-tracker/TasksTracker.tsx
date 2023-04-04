@@ -155,10 +155,7 @@ function MyProjectsTitle({ title }: { title: string }) {
 function EnableDemoWrapper() {
   const { addDummyProjects } = useProjects()
   return (
-    <div
-      role="row"
-      className="flex flex-wrap justify-center gap-2 bg-white p-2 text-center dark:bg-violet-850 lg:p-4"
-    >
+    <div className="flex flex-wrap justify-center gap-2 bg-white p-2 text-center dark:bg-violet-850 lg:p-4">
       <p className="basis-full text-xl font-bold text-violet-500 dark:text-white lg:text-2xl">
         Aucun projects à afficher
       </p>

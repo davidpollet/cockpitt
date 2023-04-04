@@ -1,4 +1,4 @@
-function darkModeCheck() {
+(function darkModeCheck() {
   const isDarkMode =
     localStorage.getItem("color-theme") === "dark" ||
     (!("color-theme" in localStorage) &&
@@ -8,6 +8,4 @@ function darkModeCheck() {
   } else {
     document.documentElement.classList.remove("dark")
   }
-}
-
-darkModeCheck()
+})()

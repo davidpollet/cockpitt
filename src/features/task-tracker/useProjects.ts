@@ -11,7 +11,6 @@ import { useUser } from "../user-auth/useUser"
 let localProjectsSyncedToDB = false
 
 export function useProjects() {
-  const [isUpdating, setIsUpdating] = React.useState(false)
   const { user, status: userStatus } = useUser()
 
   const {
@@ -30,6 +29,7 @@ export function useProjects() {
     mutate,
   } = useSWR<Project[]>(shouldFetch ? `/api/projects/${user?.id}` : null)
 
+  const [isUpdating, setIsUpdating] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(swrLoading)
   const [isMerging, setIsMerging] = React.useState(false)
 
@@ -57,11 +57,6 @@ export function useProjects() {
       }
     }
   }, [userStatus, localProjects.length, setProjects])
-
-  const projects = React.useMemo(
-    () => remoteProjects.concat(localProjects, dummyProjects),
-    [remoteProjects, localProjects, dummyProjects],
-  )
 
   const addNewProject = React.useCallback(
     function addNewProject(project: Project) {
@@ -123,6 +118,8 @@ export function useProjects() {
     remoteProjects,
     projectsFetched,
   ])
+
+  const projects = remoteProjects.concat(localProjects, dummyProjects)
 
   return {
     projects,

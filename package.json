@@ -6,6 +6,7 @@
     "dev": "next dev",
     "devHost": "next dev -H 192.168.1.47",
     "build": "next build",
+    "analyseBuild": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -33,8 +34,10 @@
     "react-hot-toast": "^2.4.0",
     "react-redux": "^7.2.9",
     "react-use": "^17.4.0",
+    "react-wrap-balancer": "^0.4.0",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
+    "sharp": "^0.32.0",
     "swr": "^2.0.4",
     "use-resize-observer": "^9.1.0",
     "zustand": "^4.3.6"

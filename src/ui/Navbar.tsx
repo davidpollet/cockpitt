@@ -13,7 +13,7 @@ export const cockpittPages = [
     name: "Mes tâches",
     title: "Mes tâches",
     path: "/app",
-    icon: <IconTasks className={`z-10 h-6 w-6 opacity-80`} />,
+    icon: <IconTasks className={`z-10 h-6 w-6 translate-y-1 self-center`} />,
   },
   {
     name: "Mon Chiffre d'affaires",

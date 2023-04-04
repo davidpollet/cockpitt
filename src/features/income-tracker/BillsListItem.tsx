@@ -35,7 +35,7 @@ export function BillsListItem({ bill }: { bill: Bill }) {
   const { openBillForm } = useFormModalBill()
 
   const [isComplete, setIsComplete] = React.useState(() =>
-    checkBillisValid(bill, user),
+    checkBillisComplete(bill, user),
   )
   async function handlePdfDownload() {
     setIsBuildingPDF(true)
@@ -47,7 +47,7 @@ export function BillsListItem({ bill }: { bill: Bill }) {
   }
 
   React.useEffect(() => {
-    setIsComplete(() => checkBillisValid(bill, user))
+    setIsComplete(() => checkBillisComplete(bill, user))
   }, [bill, user])
 
   return (
@@ -102,6 +102,7 @@ export function BillsListItem({ bill }: { bill: Bill }) {
           {!isComplete && <IncompleteMarker />}
           <span className="text-sm xl:sr-only">Télécharger</span>
           <Spinner
+            color={{ dark: "white", light: "violet" }}
             className={`absolute top-1/2 left-1/2 -translate-x-1/2 ${
               isBuildingPDF
                 ? "opacity-1 -translate-y-1/2 scale-100"
@@ -181,7 +182,7 @@ function IncompleteMarker() {
   )
 }
 
-function checkBillisValid(bill: Bill, user: User) {
+export function checkBillisComplete(bill: Bill, user: User) {
   if (bill.isDummy) return true
   if (
     !user?.society?.adress ||

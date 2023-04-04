@@ -30,10 +30,7 @@ export function BillsList() {
 
   if (bills.length === 0)
     return (
-      <div
-        role="row"
-        className="grid gap-2 p-2 text-center dark:bg-violet-850 lg:p-4"
-      >
+      <div className="grid gap-2 p-2 text-center dark:bg-violet-850 lg:p-4">
         <p className="text-xl font-bold text-violet-500 dark:text-white lg:text-2xl">
           Aucune facture à afficher
         </p>
@@ -51,7 +48,6 @@ export function BillsList() {
 
   return (
     <ol
-      role="rowgroup"
       className={`grid gap-[1px] overflow-hidden rounded-md transition-all duration-300 ease-in-out`}
     >
       <AnimatePresence>
