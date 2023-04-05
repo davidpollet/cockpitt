@@ -5,7 +5,7 @@ import useToggleDarkMode from "src/lib/hooks/useToggleDarkMode"
 
 function ThemeColorSwitch() {
   const { isDarkMode, setIsDarkMode } = useToggleDarkMode()
-  const { isMounted } = useIsMounted()
+  const isMounted = useIsMounted()
 
   if (!isMounted) {
     return null

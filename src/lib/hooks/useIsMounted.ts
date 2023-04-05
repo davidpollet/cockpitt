@@ -7,7 +7,7 @@ function useIsMounted() {
     setIsMounted(true)
   }, [])
 
-  return { isMounted }
+  return isMounted
 }
 
 export default useIsMounted

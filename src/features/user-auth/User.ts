@@ -3,16 +3,16 @@ import { Society } from "./Society"
 import { TaxRate } from "../income-tracker/addTax"
 
 export type User = {
+  accentColor: string
+  bic: string
+  customers: Customer[]
   email: string
+  iban: string
   id: string
   image: string
-  name: string
-  customers: Customer[]
-  society: Society
   lastBillNumber: number
-  iban: string
-  bic: string
+  name: string
   showPaymentInformation: boolean
-  accentColor: string
+  society: Society
   taxRate: TaxRate
 }

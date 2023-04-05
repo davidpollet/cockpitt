@@ -9,7 +9,6 @@ import useSWR from "swr"
 import { useUser } from "../user-auth/useUser"
 
 let localBillsSyncedToDB = false
-
 export function useBills() {
   const [isUpdating, setIsUpdating] = React.useState(false)
   const { user } = useUser()
@@ -49,13 +48,6 @@ export function useBills() {
     }
   }, [setBills, localBills])
 
-  // Data fetched -> Local state
-  React.useEffect(() => {
-    if (Array.isArray(fetchedBills) && !isMerging) {
-      setBills("remoteBills", fetchedBills)
-    }
-  }, [fetchedBills, setBills, isMerging])
-
   const addNewBill = React.useCallback(
     function addNewBill(newBill: Bill) {
       setIsUpdating(true)
@@ -84,6 +76,7 @@ export function useBills() {
       }
       mutate(addRemoteBill(newBill), {
         optimisticData: updatedRemoteBills,
+        revalidate: true,
       })
     },
     [localBills, mutate, remoteBills, setBills],
@@ -91,9 +84,13 @@ export function useBills() {
 
   // LocalStorage -> DB
   React.useEffect(() => {
+    if (localBillsSyncedToDB) return
+
     const userSignedWithLocalBills =
-      user?.id && localBills.length > 0 && Array.isArray(fetchedBills)
-    if (!userSignedWithLocalBills || localBillsSyncedToDB) return
+      localBills.length > 0 && fetchedBills?.length === 0
+
+    if (!userSignedWithLocalBills) return
+
     localBillsSyncedToDB = true
     setIsMerging(true)
     setIsLoading(true)
@@ -105,6 +102,15 @@ export function useBills() {
     setIsLoading(false)
     setIsMerging(false)
   }, [addNewBill, setBills, localBills, user?.id, remoteBills, fetchedBills])
+
+  // Data fetched -> Local state
+  React.useEffect(() => {
+    const asFetchedBillsToSync =
+      Array.isArray(fetchedBills) && fetchedBills.length > 0
+    if (asFetchedBillsToSync) {
+      setBills("remoteBills", fetchedBills)
+    }
+  }, [fetchedBills, setBills, isMerging])
 
   const bills = remoteBills.concat(dummyBills, localBills)
   return {

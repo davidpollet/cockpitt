@@ -46,9 +46,12 @@ function useUser() {
   const shouldFetch = Boolean(data?.user?.email)
   const {
     data: fetchedUser = null,
-    isLoading,
+    isLoading: swrLoading,
     mutate,
   } = useSWR<User | null>(shouldFetch ? `/api/user/${data?.user?.email}` : null)
+
+  const [isLoading, setIsLoading] = React.useState(swrLoading)
+  const [isMerging, setIsMerging] = React.useState(false)
 
   const updateUser = React.useCallback(
     function updateUser(updatedUser: User) {
@@ -86,6 +89,10 @@ function useUser() {
     [mutate, remoteUser, setUser],
   )
 
+  React.useEffect(() => {
+    if (!isMerging) setIsLoading(swrLoading)
+  }, [swrLoading, isMerging])
+
   // LocalStorage -> Local state
   React.useEffect(() => {
     const shouldSyncLocalStorage =
@@ -96,25 +103,43 @@ function useUser() {
     }
   }, [localUser, setUser])
 
+  // LocalStorage -> DB
+  React.useEffect(() => {
+    if (localUserSyncedToDB) return
+    const jsonUser = getLocalStorageData("localUser")
+
+    if (jsonUser && fetchedUser) {
+      localUserSyncedToDB = true
+      setIsMerging(true)
+      setIsLoading(true)
+      showToast(
+        "Syncronisation de vos données utilisateurs ajoutées hors connexion",
+        "info",
+      )
+
+      const mergedUser: User = {
+        ...fetchedUser,
+        ...jsonUser,
+        id: fetchedUser.id,
+        email: fetchedUser.email,
+        name: fetchedUser?.name || jsonUser.name,
+        image: fetchedUser.image || jsonUser.image,
+      }
+      updateUser(mergedUser)
+
+      setUser("remoteUser", mergedUser)
+      setUser("localUser", null)
+      setIsMerging(false)
+      setIsLoading(false)
+    }
+  }, [fetchedUser, updateUser, setUser])
+
   // Data fetched -> Local state
   React.useEffect(() => {
     if (fetchedUser !== undefined) {
       setUser("remoteUser", fetchedUser)
     }
   }, [fetchedUser, setUser, remoteUser])
-
-  // LocalStorage -> DB
-  React.useEffect(() => {
-    if (localUserSyncedToDB || !localUser || !remoteUser) return
-    if (localUser && remoteUser) {
-      localUserSyncedToDB = true
-      const mergedUser: User = { ...localUser, ...remoteUser }
-      updateUser(mergedUser)
-      setUser("remoteUser", mergedUser)
-      setUser("localUser", null)
-      mutate(mergedUser, { revalidate: true })
-    }
-  }, [localUser, remoteUser, updateUser, status, setUser, mutate])
 
   return {
     user: remoteUser || localUser || defaultUser,
