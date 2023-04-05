@@ -3,11 +3,7 @@ import {
   createNewProject,
   sortProjects,
 } from "./tasksHelpers"
-import {
-  TasksProject,
-  getProjectIdAttr,
-  useSelectedProject,
-} from "./TodosProject"
+import { TasksProject, getProjectIdAttr, useSelectedProject } from "./TodosProject"
 
 import { IconPlus } from "src/ui/icons/Plus"
 import { LayoutGroup } from "framer-motion"
@@ -67,9 +63,7 @@ function ProjectsNav({ projects }: { projects: Project[] }) {
   const navItemClass =
     "button is-ghost py-1 dark:text-violet-100 <lg:whitespace-nowrap <lg:px-2"
   const projectsNavRef = React.useRef<HTMLElement>(null)
-  const [projectToFocus, setProjectToFocus] = React.useState(
-    selectedProject || "",
-  )
+  const [projectToFocus, setProjectToFocus] = React.useState(selectedProject || "")
   const { updateProject, project } = useProject(projectToFocus)
   const [hasClicked, setHasClicked] = React.useState(false)
 
@@ -87,9 +81,7 @@ function ProjectsNav({ projects }: { projects: Project[] }) {
     const projectId = e.currentTarget.dataset.projectid
     const projectElTarget = document.querySelector(projectHash) as HTMLElement
     const navEl = projectsNavRef.current as HTMLElement
-    const navElIsOnSide = Number(
-      window.getComputedStyle(navEl).getPropertyValue("order"),
-    )
+    const navElIsOnSide = Number(window.getComputedStyle(navEl).getPropertyValue("order"))
     setSelectedProject(projectId || "")
     setProjectToFocus(projectId || "")
     setHasClicked(true)
@@ -175,10 +167,7 @@ function AddNewProjectButton() {
   const { user } = useUser()
   const { setSelectedProject } = useSelectedProject()
   function handleCreateNewProject() {
-    const newProject = createNewProject(
-      NEW_PROJECT_PLACEHOLDER_NAME,
-      user?.id || "",
-    )
+    const newProject = createNewProject(NEW_PROJECT_PLACEHOLDER_NAME, user?.id || "")
     addNewProject(newProject)
     setSelectedProject(newProject.id)
   }
@@ -212,7 +201,7 @@ function AddNewProjectButton() {
 function RemoveDummyProjectsBox() {
   const { removeDummyProjects } = useProjects()
   return (
-    <div role="row" className="my-2 dark:bg-violet-850">
+    <div className="my-2 dark:bg-violet-850">
       <button
         className="button is-outline justify-self-center dark:from-violet-300 dark:to-violet-300 dark:text-violet-100 dark:ring-violet-100 dark:hocus:text-violet-600"
         onClick={removeDummyProjects}

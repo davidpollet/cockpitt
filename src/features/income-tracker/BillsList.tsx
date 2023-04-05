@@ -47,9 +47,7 @@ export function BillsList() {
     )
 
   return (
-    <ol
-      className={`grid gap-[1px] overflow-hidden rounded-md transition-all duration-300 ease-in-out`}
-    >
+    <ol className={`grid gap-2 transition-all duration-300 ease-in-out xl:gap-[1px]`}>
       <AnimatePresence>
         {bills.map((bill: Bill) => (
           <BillsListItem key={bill.id} bill={bill} />

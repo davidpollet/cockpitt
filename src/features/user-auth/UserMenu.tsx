@@ -73,9 +73,7 @@ function UserMenu() {
                       onClick={signOut}
                     >
                       <IconExit className=" h-6 w-6 fill-violet-500 leading-none opacity-80" />
-                      <span className="self-center leading-none">
-                        Déconnexion
-                      </span>
+                      <span className="self-center leading-none">Déconnexion</span>
                     </button>
                   )}
                 </Menu.Item>

@@ -24,7 +24,7 @@ export function useProjects() {
 
   const shouldFetch = Boolean(user?.email)
   const {
-    data: projectsFetched,
+    data: fetchedProjects,
     isLoading: swrLoading,
     mutate,
   } = useSWR<Project[]>(shouldFetch ? `/api/projects/${user?.id}` : null)
@@ -36,13 +36,6 @@ export function useProjects() {
   React.useEffect(() => {
     if (!isMerging) setIsLoading(swrLoading)
   }, [swrLoading, isMerging])
-
-  // Data fetched -> Local state
-  React.useEffect(() => {
-    if (Array.isArray(projectsFetched)) {
-      setProjects("remoteProjects", projectsFetched)
-    }
-  }, [projectsFetched, setProjects])
 
   // LocalStorage -> Local state
   React.useEffect(() => {
@@ -86,6 +79,7 @@ export function useProjects() {
       }
       mutate(addRemoteProject(project), {
         optimisticData: [project, ...remoteProjects],
+        revalidate: true,
       })
     },
     [localProjects, mutate, setProjects, remoteProjects],
@@ -93,12 +87,14 @@ export function useProjects() {
 
   // LocalStorage -> DB
   React.useEffect(() => {
+    if (localProjectsSyncedToDB) return
+
     const userSignedWithLocalProjects =
-      user?.id && localProjects.length > 0 && Array.isArray(projectsFetched)
+      localProjects.length > 0 && fetchedProjects?.length === 0
 
-    if (!userSignedWithLocalProjects || localProjectsSyncedToDB) return
+    if (!userSignedWithLocalProjects) return
+
     localProjectsSyncedToDB = true
-
     showToast("Syncronisation des projets ajoutés hors connexion", "info")
     setIsMerging(true)
     setIsLoading(true)
@@ -116,8 +112,17 @@ export function useProjects() {
     localProjects,
     user?.id,
     remoteProjects,
-    projectsFetched,
+    fetchedProjects,
   ])
+
+  // Data fetched -> Local state
+  React.useEffect(() => {
+    const asFetchedProjectsToSync =
+      Array.isArray(fetchedProjects) && fetchedProjects.length > 0
+    if (asFetchedProjectsToSync) {
+      setProjects("remoteProjects", fetchedProjects)
+    }
+  }, [fetchedProjects, setProjects])
 
   const projects = remoteProjects.concat(localProjects, dummyProjects)
 

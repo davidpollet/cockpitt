@@ -7,7 +7,7 @@
       "status status status status status status"
       "actions actions actions actions actions actions";
 
-    @media screen and (min-width: theme("screens.md")) {
+    @media screen and (min-width: theme("screens.sm")) {
       grid-template-areas:
         "customer customer customer amount amount amount"
         "description description description description description description"
@@ -16,7 +16,7 @@
 
     @media screen and (min-width: theme("screens.xl")) {
       grid-template-areas: none;
-      grid-template-columns: 20ch 12ch 30% 1fr auto;
+      grid-template-columns: 20ch 12ch 1fr 1fr auto;
 
       >[class*="col-bills-"] {
         grid-area: auto;

@@ -22,9 +22,7 @@ export function BillStatus({ bill }: { bill: Bill }) {
 
   function handleCheckStepChange(e: React.ChangeEvent<HTMLInputElement>) {
     const todayTime = new Date().getTime()
-    const property: Status = e.target.id
-      .match("sentAt|cashedAt")
-      ?.at(0) as Status
+    const property: Status = e.target.id.match("sentAt|cashedAt")?.at(0) as Status
     let { sentAt, cashedAt } = bill
     if (property === "cashedAt" && !sentAt && !cashedAt) {
       sentAt = sentAt || todayTime
@@ -55,11 +53,10 @@ export function BillStatus({ bill }: { bill: Bill }) {
   }
 
   const stepIsDisabled =
-    time().diff(bill.sentAt, "days") > 1 ||
-    time().diff(bill.remindedAt[0], "days") > 1
+    time().diff(bill.sentAt, "days") > 1 || time().diff(bill.remindedAt[0], "days") > 1
 
   return (
-    <div className={`flex items-center text-sm`}>
+    <div className={`flex text-sm`}>
       <div className="flex grow flex-wrap items-center gap-x-2 gap-y-1 dark:text-violet-100 xl:order-1 xl:justify-start">
         <p>{getStatusLabel(bill)}</p>
         {isLate && (
@@ -113,7 +110,7 @@ export function BillStatus({ bill }: { bill: Bill }) {
         className={`${cn("bill-step", "step-cashed", {
           "is-fullfilled": bill.cashedAt,
           "is-disabled": time().diff(bill.cashedAt, "days") > 1,
-        })} step-cashed  translate-y-[2px]`}
+        })} step-cashed`}
       >
         <span className={"step-icon"} aria-hidden>
           <IconCashed />
